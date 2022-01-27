@@ -1,0 +1,12 @@
+.modal-h-800 {
+	--height: 80%;
+	min-height: 600px;
+}
+
+@media screen and (max-width: 770px), screen and (max-height: 600px)
+{
+	.modal-h-800  {
+		--height: 100%;
+	}
+}
+
