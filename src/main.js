@@ -16,6 +16,12 @@ import '@ionic/vue/css/text-transformation.css';
 import '@ionic/vue/css/flex-utils.css';
 import '@ionic/vue/css/display.css';
 
+//swiper
+import 'swiper/swiper-bundle.min.css'
+import 'swiper/swiper.min.css'
+import 'swiper/components/navigation/navigation.min.css'
+import 'swiper/components/pagination/pagination.min.css'
+
 import './theme/variables.css'
 import './theme/styles.scss'
 
@@ -28,16 +34,26 @@ import '@vaadin/vaadin';
 const app = createApp(App).use(IonicVue).use(router);
 
 app.mixin({
-  data() {
-    return {
-      icons: AllIcons,
-    };
-  },
-  methods: {
-    iicon(name) {
-      return this.icons[name].ios;
-    }
-  }
+	data() {
+		return {
+			icons: Object.keys(AllIcons).reduce((map, elem) => {
+				map[elem.toLowerCase()] = AllIcons[elem];
+				return map;
+			}, {})
+		}
+	},
+
+	methods: {
+		iicon(name) {
+			var icon = this.icons[name = name.toLowerCase().replace("-", "")];
+			if (icon)
+				return icon;
+				
+			for(var key in this.icons)
+				if (key.indexOf(name) > -1)
+					return this.icons[key];
+		}
+	}
 });
 
 router.isReady().then(() => {

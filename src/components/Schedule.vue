@@ -1,13 +1,13 @@
 <template>
-	<div class="schedule all-100">
+	<div class="schedule">
 		<ion-grid class="ion-padding" ref="scrollable">
 			<transition-group name="appear">
 				<ion-row v-for="(stamp, i) in timeStamps" :key="i">
 					<ion-col>
 						<ion-card :class="{cardDisabled: !stamp.enable}">
 							<ion-card-content>
-								<ion-datetime presentation="time" :value="stamp.value" @ionChange="stamp.value = $event.target.value"></ion-datetime>
-								<ion-toggle v-model="stamp.enable"></ion-toggle>
+								<ion-datetime presentation="time" hourCycle="h23" mode="ios" :value="stamp.value" @ionChange="stamp.value = $event.target.value"></ion-datetime>
+								<ion-toggle v-model="stamp.enable"></ion-toggle> 
 							</ion-card-content>
 						</ion-card>
 					</ion-col>
@@ -18,7 +18,7 @@
 		<ion-footer>
 			<ion-buttons>
 				<ion-button class="wideButton" fill="solid" color="success" shape="round" @click="newTimeStamp()">
-					Add
+					<ion-icon :icon="iicon('add')"></ion-icon>
 				</ion-button>
 			</ion-buttons>
 		</ion-footer>
@@ -46,6 +46,15 @@ export default {
 		}
 	},
 
+	watch: {
+		timeStamps: { 
+			handler: function() {
+				this.$emit("onTimeStampsSchanged", this.timeStamps);
+			},
+			deep: true
+		}
+	},
+
 	mounted() {
 
 	},
@@ -54,31 +63,35 @@ export default {
 
 <style lang="scss" scoped>
 .schedule {
-	width: 100%;
 	max-width: 400px;
-	min-width: 265px;
-	height: 550px;
-	margin: auto;
+	height: 400px;
+	min-height: 265px;
+	max-height: 550px;
+	margin: 20px auto 20px;
 
-	background: aliceblue;
+	background: gray;
 	border-radius: 10px;
-}
 
-.cardDisabled {
-	background: lightslategray;
+	.cardDisabled {
+		background: lightslategray;
 
-	ion-datetime {
-		--background: #99aabb;
+		ion-datetime {
+			--background: #99aabb;
+		}
 	}
 }
 
-ion-datetime {
-	border-radius: 10px;
-	border: 1px solid rgba(0, 0, 0, .1);
+ion-grid {
+	overflow: auto;
+	scroll-behavior: smooth;
+	height: calc(100% - 40px);
 }
 
-ion-buttons {
-	height: 40px;
+ion-datetime {
+	// height: 100px;
+	// max-height: 100px;
+	border-radius: 10px;
+	border: 1px solid rgba(0, 0, 0, .1);
 }
 
 ion-toggle {
@@ -91,14 +104,16 @@ ion-toggle {
 	--handle-background-checked: var(--ion-color-success-contrast);
 }
 
-ion-grid {
-	overflow: auto;
-	scroll-behavior: smooth;
-	height: calc(100% - 40px);
+ion-buttons {
+	height: 40px;
+
+	ion-icon {
+		font-size: 34px;
+	}
 }
 
 ion-footer {
-	background: white;
+	background: gray;
 	border-radius: 10px;
 }
 

@@ -3,13 +3,13 @@
 		<ion-toolbar>
 			<ion-item slot = "start">
 				<ion-avatar role="button" @click="$emit('profileClicked', tag)">
-					<img src="../assets/imgs/avatar.svg" alt="user profile">
+					<img :src="leftImg" alt="left image">
 				</ion-avatar>
 			</ion-item>
 
 			<ion-item slot = "end">
 				<ion-avatar role="button" @click="$emit('plusClicked', tag)">
-					<img src="../assets/imgs/plus.svg" alt="add device">
+					<img :src="rightImg" alt="right image">
 				</ion-avatar>
 			</ion-item>
 			<slot>
@@ -20,18 +20,10 @@
 
 <script>
 export default {
-
-	data() {
-		return {
-			lol: "aaaaa"
-		}
+	props: {
+		leftImg: "",
+		rightImg: ""
 	},
-
-	methods: {
-		lola(asda) {
-			console.log(asda);
-		}
-	}
 }
 </script>
 

@@ -5,7 +5,7 @@
 				<ion-toolbar>
 					<ion-buttons slot="end" v-if="hasCloseBtn">
 						<ion-button @click="close()" shape="round">
-							<ion-icon :icon="iicon('closeCircleOutline')"></ion-icon>
+							<ion-icon :icon="iicon('closeCircleSharp')"></ion-icon>
 						</ion-button>
 					</ion-buttons>
 					<ion-title>{{title}}</ion-title> 
