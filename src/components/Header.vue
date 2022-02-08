@@ -1,47 +1,45 @@
 <template>
 	<ion-header>
 		<ion-toolbar>
-			<ion-item slot = "start">
-				<ion-avatar role="button" @click="$emit('profileClicked', tag)">
-					<img :src="leftImg" alt="left image">
-				</ion-avatar>
-			</ion-item>
-
-			<ion-item slot = "end">
-				<ion-avatar role="button" @click="$emit('plusClicked', tag)">
-					<img :src="rightImg" alt="right image">
-				</ion-avatar>
-			</ion-item>
-			<slot>
-			</slot>
+			<ion-avatar slot="start" role="button" @click="$emit('profileClicked', tag)">
+				<img :src="laftImg ?? '@/assets/imgs/avatar.svg'" alt="avatar"> <!-- ???????? -->
+			</ion-avatar>
+			
+			<ion-avatar slot="end" role="button" @click="$emit('plusClicked', tag)">
+				<img :src="rightImg ?? '@/assets/imgs/plus.svg'" alt="plus">
+			</ion-avatar>
 		</ion-toolbar>
 	</ion-header>
 </template>
 
 <script>
 export default {
+
 	props: {
-		leftImg: "",
-		rightImg: ""
+		laftImg: {
+			type: String,
+			default: undefined
+		},
+		rightImg: {
+			type: String,
+			default: undefined
+		}
+	},
+
+	mounted() {
+		console.log(this.laftImg ?? '@/assets/imgs/avatar.svg'); //toto to ide aj sa to da to src ale ono proste nie...
 	},
 }
 </script>
 
 <style lang="scss" scoped>
-ion-title {
-	text-align: center;
+ion-avatar {
+	height: 34px;
+	width: 34px;
+	transition: 0.2s;
 }
 
-ion-item {
-	--background: transparent;
-	--inner-border-width: 0;
-}
-
-img {
-	transition: 0.2s filter;
-}
-
-img:active {
+ion-avatar:active {
 	filter: brightness(88%);
 }
 </style>
