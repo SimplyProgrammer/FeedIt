@@ -1,20 +1,18 @@
 <template>
 	<ion-header>
 		<ion-toolbar>
-			<ion-avatar slot="start" role="button" @click="$emit('profileClicked', tag)">
-				<img :src="laftImg ?? '@/assets/imgs/avatar.svg'" alt="avatar"> <!-- ???????? -->
-			</ion-avatar>
+			<img v-if="leftImg" :src="data.leftImg" slot="start">
+			<img v-else src="@/assets/imgs/avatar.svg" slot="start">
 			
-			<ion-avatar slot="end" role="button" @click="$emit('plusClicked', tag)">
-				<img :src="rightImg ?? '@/assets/imgs/plus.svg'" alt="plus">
-			</ion-avatar>
+			<ion-icon :icon="add" slot="end"></ion-icon>
 		</ion-toolbar>
 	</ion-header>
 </template>
 
 <script>
-export default {
+import { add } from 'ionicons/icons'
 
+export default {
 	props: {
 		laftImg: {
 			type: String,
@@ -26,20 +24,23 @@ export default {
 		}
 	},
 
-	mounted() {
-		console.log(this.laftImg ?? '@/assets/imgs/avatar.svg'); //toto to ide aj sa to da to src ale ono proste nie...
-	},
+	data() {
+		return {
+			add,
+		}
+	}
 }
 </script>
 
 <style lang="scss" scoped>
-ion-avatar {
+img {
 	height: 34px;
 	width: 34px;
-	transition: 0.2s;
+	border-radius: 50%;
 }
 
-ion-avatar:active {
-	filter: brightness(88%);
+ion-icon {
+	width: 25px;
+	height: 25px;
 }
 </style>

@@ -1,10 +1,12 @@
 <template>
 	<ion-page>
 		<Header ref="header"/>
-
 		<ion-content>
-			<swiper :modules="[Navigation, Pagination, Scrollbar, A11y]" :slides-per-view="1" :space-between="50" class="all-100" ref="swiper">
-				<swiper-slide>
+			<swiper :modules="[Navigation, Pagination, Scrollbar, A11y]" :slides-per-view="1" :space-between="50" class="swiper" ref="swiper">
+				<swiper-slide class="swiper-slide">
+					<Card />
+				</swiper-slide>
+				<swiper-slide class="swiper-slide">
 					<Card />
 				</swiper-slide>
 			</swiper>
@@ -52,21 +54,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-ion-content {
-	// --padding-end: 10px;
-	// --padding-start: 10px;
-	// --padding-top: 10px;
-	// --padding-bottom: 10px;
+.swiper {
+	height: 100%;
 }
-
-// ion-row {
-// 	max-width: 550px;
-// 	margin: auto;
-// 	margin-bottom: 30px;
-// }
-
-// ion-footer {
-// 	position: absolute;
-//  	bottom: 0;
-// }
 </style>
