@@ -2,7 +2,10 @@
 	<ion-page>
 		<Header ref="header"/>
 		<ion-content>
-			<swiper :modules="[Navigation, Pagination, Scrollbar, A11y]" :slides-per-view="1" :space-between="50" class="swiper" ref="swiper">
+			<swiper :modules="[Navigation, Pagination, Scrollbar, A11y]" :slides-per-view="1" :space-between="0" class="swiper" ref="swiper">
+				<swiper-slide class="swiper-slide">
+					<Card />
+				</swiper-slide>
 				<swiper-slide class="swiper-slide">
 					<Card />
 				</swiper-slide>
@@ -22,7 +25,11 @@ import Card from '@/components/card.vue';
 export default {
 	components: {
 		Header,
-		Card
+		Card,
+		// Navigation,
+		// Pagination,
+		// Scrollbar,
+		// A11y
 	},
 
 	data() {

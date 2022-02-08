@@ -15,7 +15,7 @@
 
 		<ion-item lines="none" class="add-plan mb-2">
 			<h2>Časové plány</h2>
-			<ion-icon :icon="add" slot="end"></ion-icon>
+			<ion-icon :icon="add" slot="end" @click="openPlanModal()"></ion-icon>
 		</ion-item>
 
 		<div class="plan d-flex ion-justify-content-between ion-align-items-center">
@@ -29,6 +29,8 @@
 </template>
 
 <script>
+import { modalController } from '@ionic/vue';
+import AddPlanModal from '@/components/add-plan-modal.vue'
 import { add } from 'ionicons/icons'
 
 export default {
@@ -36,7 +38,18 @@ export default {
 		return {
 			add,
 		}
-	}
+	},
+
+	methods: {
+		async openPlanModal() {
+			const addPlanModal = await modalController
+				.create({
+					component: AddPlanModal,
+					cssClass: 'app-plan-modal',
+				})
+			return addPlanModal.present();
+		},
+	},
 }
 </script>
 
