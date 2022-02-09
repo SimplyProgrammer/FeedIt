@@ -3,6 +3,8 @@
 		<ion-toolbar>
 			<img v-if="leftImg" :src="data.leftImg" slot="start">
 			<img v-else src="@/assets/imgs/avatar.svg" slot="start">
+
+			<ion-title>FeedIt</ion-title>
 			
 			<ion-icon :icon="add" slot="end"></ion-icon>
 		</ion-toolbar>
