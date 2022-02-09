@@ -45,8 +45,8 @@ export default {
 			const addPlanModal = await modalController
 				.create({
 					component: AddPlanModal,
-					breakpoints: [0, 0.7, 0.9],
-					initialBreakpoint: 0.7
+					breakpoints: [0, 1],
+					initialBreakpoint: 1
 				})
 			return addPlanModal.present();
 		},
