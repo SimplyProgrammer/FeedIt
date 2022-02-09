@@ -6,13 +6,13 @@
 
 			<ion-title>FeedIt</ion-title>
 			
-			<ion-icon :icon="icons.add" slot="end" @click="openAddDeviceModal()"></ion-icon>
+			<ion-icon :icon="icons.add" slot="end" @click="openDeviceModal()"></ion-icon>
 		</ion-toolbar>
 	</ion-header>
 </template>
 
 <script>
-import AddDeviceModal from '@/components/AddDeviceModal.vue';
+import AddDeviceModal from '@/components/add-device-modal.vue';
 
 export default {
 	props: {
@@ -27,11 +27,11 @@ export default {
 	},
 
 	methods: {
-		async openAddDeviceModal() {
+		async openDeviceModal() {
 			const addDeviceModal = await this.modalController.create({
 				component: AddDeviceModal,
-				breakpoints: [0, 0.4],
-				initialBreakpoint: 0.4
+				breakpoints: [0, 1],
+				initialBreakpoint: 1
 			});
 			return addDeviceModal.present();
 		},
