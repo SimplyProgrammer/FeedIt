@@ -16,42 +16,39 @@ export default {
 			type: Array,
 			default: []
 		},
-		activeValues: {
-			type: Array,
-			default: []
-		}
-		// multiselection: true
+		multiselection: {
+			type: Boolean,
+			default: true
+		},
+
 	},
 
 	data() {
 		return {
-			localActiveValues: []
+			activeValues: []
 		}
-	},
-
-	created() {
-		this.localActiveValues = this.activeValues;
 	},
 
 	methods: {
 		toggleTagFilter(velue) {
-			// if (!this.multiselection)
-			// {
-			// 	selectedValues = [value];
-			// 	return;
-			// }
+			if (!this.multiselection)
+			{
+				this.activeValues = [velue];
+				return;
+			}
 
-            if (this.localActiveValues.includes(velue)) {
-                this.localActiveValues = this.localActiveValues.filter(item => item != velue);
+            if (this.activeValues.includes(velue)) {
+                this.activeValues = this.activeValues.filter(item => item != velue);
             } else {
-                this.localActiveValues.push(velue);
+                this.activeValues.push(velue);
             }
+			this.$emit("selected", this.activeValues);
         },
 	},
 
 	computed: {
 		selectedValues: function() {
-			return this.localActiveValues.sort();
+			return this.activeValues.sort();
 		}
 	}
 }
@@ -60,7 +57,7 @@ export default {
 <style lang="scss" scoped>
 .selector {
 	padding: 10px 0;
-	// box-shadow: 0px 0px 15px -5px rgba(0, 0, 0, 0.3);
+	box-shadow: 0px 0px 15px -5px rgba(0, 0, 0, 0.3);
 	border-radius: 10px;
 
 	.data {
@@ -85,6 +82,7 @@ export default {
 			justify-content: center;
 			align-items: center;
 			border-radius: 50px;
+			transition: 0.2s;
 		}
 
 		p {
@@ -96,6 +94,7 @@ export default {
 			margin-top: 10px;
 			width: 5px;
 			height: 5px;
+			transition: 0.2s;
 		}
 	}
 }

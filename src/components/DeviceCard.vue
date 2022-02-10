@@ -3,9 +3,9 @@
 		<ion-card-header>
 			<img src="@/assets/imgs/krmitko1.png" alt="">
 			<div class="description">
-				<h1>XY Feeder</h1>
+				<h1>{{data.name}}</h1>
 				<div class="w-fit d-flex ion-align-items-center margin-auto">
-					<p>Pripojene:</p>
+					<p>Status:</p>
 					<div class="indicator"></div>
 				</div>
 			</div>
@@ -18,11 +18,11 @@
 			<ion-icon :icon="icons.add" slot="end" @click="openPlanModal()"></ion-icon>
 		</ion-item>
 
-		<div v-for="(plan, i) in plans" :key="i" class="plan d-flex ion-justify-content-between ion-align-items-center" @click.self="openPlanEditModal(i)">
-			<p>{{plan.days}}</p>
+		<div v-for="(plan, i) in plans" :key="i" class="plan d-flex ion-justify-content-between ion-align-items-center" @click.self="openPlanModal(i)">
+			<p>{{plan.formatedDays}}</p>
 			<div class="d-flex ion-align-items-center">
 				<p>{{plan.time}}</p>
-				<ion-toggle></ion-toggle>
+				<ion-toggle v-model="plan.active"></ion-toggle>
 			</div>
 		</div>
 	</ion-card>
@@ -32,6 +32,12 @@
 import AddPlanModal from '@/components/add-plan-modal.vue'
 
 export default {
+	props: {
+		data: {
+			type: Object
+		}
+	},
+
 	data() {
 		return {
 			plans: []
@@ -39,40 +45,27 @@ export default {
 	},
 
 	methods: {
-		async openPlanModal() {
-			this.addPlanModal = await this.modalController.create({
-				component: AddPlanModal,
-				breakpoints: [0, 1],
-				initialBreakpoint: 1
-			});
-			this.addPlanModal.present();
-
-			const { data } = await this.addPlanModal.onDidDismiss();
-			if (!data) 
-				return;
-
-			const {days, time} = data;
-			this.plans.push({days, time});
-		},
-
-		async openPlanEditModal(index) {
+		async openPlanModal(index = -1) {
 			this.addPlanModal = await this.modalController.create({
 				component: AddPlanModal,
 				breakpoints: [0, 1],
 				initialBreakpoint: 1,
 				componentProps: {
-					time: this.plans[index].time
+					time: index == -1 ? undefined : this.plans[index].time,
+					selectedDays: index == -1 ? undefined : this.plans[index].days,
 				}
 			});
 			this.addPlanModal.present();
-			console.log(this.addPlanModal);
 
 			const { data } = await this.addPlanModal.onDidDismiss();
 			if (!data) 
 				return;
 
-			const {days, time} = data;
-			this.plans[index] = {days, time};
+			data.active = true;
+			if (index == -1)
+				this.plans.push(data);
+			else
+				this.plans[index] = data;
 		},
 	},
 }

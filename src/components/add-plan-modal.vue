@@ -1,46 +1,37 @@
 <template>
-	<ion-header>
-		<ion-toolbar>
-			<ion-title>Nový časový plán</ion-title>
-			<ion-icon slot="end" :icon="icons.closeOutline" @click="closeModal()"></ion-icon>
-		</ion-toolbar>
-	</ion-header>
-	<ion-content class="ion-padding">
-		<div class="content">
-			<div>
-				<div class="grid-item">
-					<h4>Vyberte Čas:</h4>
-					<ion-datetime class="time-picker" hour-cycle="h23" presentation="time" mode="md" :value="time" @ionChange="time = $event.target.value"></ion-datetime>
-				</div>
+	<Modal title="Casový plán" ref="modal">
+		<div>
+			<div class="grid-item">
+				<h4>Vyberte Čas:</h4>
+				<ion-datetime class="time-picker" hour-cycle="h23" presentation="time" mode="md" :value="modalTime" @ionChange="modalTime = $event.target.value"></ion-datetime>
+			</div>
 
-				<h4>Vyberte dni:</h4>
-				<Selection :values="days" ref="selection"/>
-			</div>
-		
-			<div class="buttons-wrapper">
-				<ion-button color="secondary" @click="closeModal()">Zrušiť</ion-button>
-				<ion-button color="secondary" @click="saveModal()">Uložiť</ion-button>
-			</div>
+			<h4>Vyberte dni:</h4>
+			<Selection :values="days.map(day => day.substring(0, 1))" @selected="daySelectionChange" ref="selection"/>
 		</div>
-		
-	</ion-content>
+
+		<div class="buttons-wrapper">
+			<ion-button color="secondary" @click="$refs.modal.closeModal()" ref="cancel">Zrušiť</ion-button>
+			<ion-button color="secondary" @click="saveModal()" :disabled="!canSave" ref="save">Uložiť</ion-button>
+		</div>
+	</Modal>
 </template>
 
 <script>
 import Selection from '@/components/selection.vue';
+import Modal from '@/components/Modal.vue';
 
 export default {
-	// computed: {
-	// 	canSave: function() {
-	// 		console.log(this.$refs.selection?.activeValues?.length);
-	// 		return this.$refs?.selection?.activeValues?.length > 0;
-	// 	},
-	// },
+
+	components: {
+		Selection,
+		Modal
+	},
 
 	props: {
 		time: {
 			type: String,
-			default: "08:00"
+			default: "08:30"
 		},
 		selectedDays: {
 			type: Array,
@@ -48,22 +39,9 @@ export default {
 		},
 	},
 
-	components: {
-		Selection
-	},
-
 	data() {
 		return {
 			days: [
-				"P",
-				"U",
-				"S",
-				"Š",
-				"P",
-				"S", 
-				"N"
-			],
-			dayValues: [
 				"Pondelok",
 				"Utorok",
 				"Streda",
@@ -72,45 +50,45 @@ export default {
 				"Sobota", 
 				"Nedela"
 			],
-			time: "08:30",
+			canSave: false
 		}
 	},
 
 	created() {
-		this.modalTime = this.time
-		this.modalSelectedDays = this.selectedDays
+		this.modalTime = this.time;
+		setTimeout(() => {this.$refs.selection.activeValues = this.selectedDays}, 100);
 	},
 
 	methods: {
-		closeModal() {
-			this.modalController.dismiss();
-		},
-
 		saveModal() {
 			const days = this.$refs.selection.selectedValues;
 			if (days.length) {
 				this.modalController.dismiss({
-					days: this.radicate(days),
-					time: this.time,
+					days: days,
+					formatedDays: this.formatSelection(days),
+					time: this.modalTime,
 				});
 			}
 		},
 
-		radicate(selectedDays) {
-			if (selectedDays.length == 1) {
-				return this.dayValues[selectedDays[0]];
+		daySelectionChange() {
+			this.canSave = this.$refs.selection.activeValues.length > 0; 
+		},
+
+		formatSelection(selectedIndexes) {
+			if (selectedIndexes.length == 1) {
+				return this.days[selectedIndexes[0]];
 			}
 
 			let isOrdered = true;
-			selectedDays.forEach((day, index) => {
-				if (selectedDays[index + 1] && day + 1 != selectedDays[index + 1]) {
+			selectedIndexes.forEach((day, index) => {
+				if (selectedIndexes[index + 1] && day + 1 != selectedIndexes[index + 1]) {
 					isOrdered = false;
 					return false;
 				}
 			})
 
-			const days = selectedDays.map((dayIndex) => this.dayValues[dayIndex].substring(0, 2));
-
+			const days = selectedIndexes.map(daysIndex => this.days[daysIndex].substring(0, 2));
 			if (isOrdered) {
 				return days[0] + " - " + days.slice(-1);
 			}
@@ -118,14 +96,8 @@ export default {
 		}
 	},
 
-	computed: {
-		canSaveComp: function() {
-			return this.$refs.selection.activeValues.length > 0;
-		}
-	},
-
 	mounted() {
-		this.canSave = this.canSaveComp;
+		this.canSave = this.selectedDays.length > 0;
 	}
 };
 </script>

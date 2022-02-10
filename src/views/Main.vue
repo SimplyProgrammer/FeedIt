@@ -1,16 +1,10 @@
 <template>
 	<ion-page>
-		<Header ref="header"/>
+		<Header @addClicked="openDeviceModal" ref="header"/>
 		<ion-content>
 			<swiper :modules="[Navigation, Pagination, Scrollbar, A11y]" :slides-per-view="1" :space-between="0" class="swiper" ref="swiper">
-				<swiper-slide class="swiper-slide">
-					<Card />
-				</swiper-slide>
-				<swiper-slide class="swiper-slide">
-					<Card />
-				</swiper-slide>
-				<swiper-slide class="swiper-slide">
-					<Card />
+				<swiper-slide v-for="(device, i) in deviceProfiles" :key="i">
+					<DeviceCard :data="device"/>
 				</swiper-slide>
 			</swiper>
 		</ion-content>
@@ -20,12 +14,14 @@
 <script>
 import Header from '@/components/Header.vue';
 // import { Navigation, Pagination, Scrollbar, A11y } from 'swiper';
-import Card from '@/components/card.vue';
+import DeviceCard from '@/components/DeviceCard.vue';
+import AddDeviceModal from '@/components/add-device-modal.vue';
 
 export default {
 	components: {
 		Header,
-		Card,
+		DeviceCard,
+		AddDeviceModal,
 		// Navigation,
 		// Pagination,
 		// Scrollbar,
@@ -34,27 +30,36 @@ export default {
 
 	data() {
 		return {
-			this: this,
-			deviceName: "",
-			deviceIp: "",
 			deviceProfiles: [
-
+				{
+					name: "XY Feeder"
+				}
 			],
 		}
 	},
 
 	methods: {
+		async openDeviceModal() {
+			this.addDeviceModal = await this.modalController.create({
+				component: AddDeviceModal,
+				breakpoints: [0, 1],
+				initialBreakpoint: 1
+			});
+			this.addDeviceModal.present();
+
+			const { data } = await this.addDeviceModal.onDidDismiss();
+			if (!data) 
+				return;
+
+			this.deviceProfiles.push(data);
+		},
+
 		add()
 		{
 			this.deviceProfiles.push({
 				name: this.deviceName,
 				ip: this.deviceIp,
-				timeStamps: this.$refs.addProdSchdule.timeStamps,
 			});
-			
-			this.deviceName = this.deviceIp = "";
-			this.$refs.addProdSchdule.timeStamps = [];
-			this.$refs.addProd.close();
 		}
 	},
 }

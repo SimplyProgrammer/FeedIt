@@ -1,0 +1,10 @@
+ion-modal {
+	.buttons-wrapper {
+		display: flex;
+		margin-top: 50px;
+
+		ion-button {
+			flex: 1;
+		}
+	}
+}

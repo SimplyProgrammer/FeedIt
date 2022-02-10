@@ -4,8 +4,6 @@
 		<img src="https://lh3.googleusercontent.com/jq1i1nFKtLmxQI70ss58AfAwZi0Ef44ie62bthVndVBeHrPL04Ea46560tm-Pdki7phe=w300">
 		<p>Please accept this dinosaur instead!</p>
 	</div>
-	<vaadin-time-picker>
-	</vaadin-time-picker>
 </template>
 
 <style scoped>
