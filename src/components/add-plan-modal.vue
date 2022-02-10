@@ -14,12 +14,12 @@
 				</div>
 
 				<h4>Vyberte dni:</h4>
-				<Selection :data="days" :values="dayValues"/>
+				<Selection :values="days" ref="selection"/>
 			</div>
 		
 			<div class="buttons-wrapper">
 				<ion-button color="secondary" @click="closeModal()">Zrušiť</ion-button>
-				<ion-button color="secondary"  :disabled="selectedDays.length <= 0"  @click="saveModal()">Uložiť</ion-button>
+				<ion-button color="secondary" @click="saveModal()">Uložiť</ion-button>
 			</div>
 		</div>
 		
@@ -30,6 +30,13 @@
 import Selection from '@/components/selection.vue';
 
 export default {
+	// computed: {
+	// 	canSave: function() {
+	// 		console.log(this.$refs.selection?.activeValues?.length);
+	// 		return this.$refs?.selection?.activeValues?.length > 0;
+	// 	},
+	// },
+
 	components: {
 		Selection
 	},
@@ -46,15 +53,14 @@ export default {
 				"N"
 			],
 			dayValues: [
-				"Po",
-				"Ut",
-				"St",
-				"Št",
-				"Pi",
-				"So", 
-				"Ne"
+				"Pondelok",
+				"Utorok",
+				"Streda",
+				"Štvrtok",
+				"Piatok",
+				"Sobota", 
+				"Nedela"
 			],
-			selectedDays: [],
 			time: "08:30"
 		}
 	},
@@ -64,37 +70,48 @@ export default {
 			this.modalController.dismiss();
 		},
 
-		toggleTagFilter(day) {
-            if (this.selectedDays.includes(day)) {
-                this.selectedDays = this.selectedDays.filter(item => item != day);
-            } else {
-                this.selectedDays.push(day);
-            }
-        },
-
 		saveModal() {
-			console.log(this.radicate(this.selectedDays));
-			// if (this.selectedDays.length) {
-			// 	this.modalController.dismiss({
-			// 		days: this.selectedDays,
-			// 		time: this.time,
-			// 	});
-			// }
+			const days = this.$refs.selection.selectedValues;
+			if (days.length) {
+				this.modalController.dismiss({
+					days: this.radicate(days),
+					time: this.time,
+				});
+			}
 		},
 
 		radicate(selectedDays) {
-			var result = "";
-			if (selectedDays.length > 3) {
-				var inRow = 0;
-				for (let i = 0; i < selectedDays.length; i++) {
-					
-				}
+			if (selectedDays.length == 1) {
+				return this.dayValues[selectedDays[0]];
 			}
-			else
-				return selectedDays;
-			return result;
+
+			let isOrdered = true;
+			
+			selectedDays.forEach((day, index) => {
+				if (selectedDays[index + 1] && day + 1 != selectedDays[index + 1]) {
+					isOrdered = false;
+					return false;
+				}
+			})
+
+			const days = selectedDays.map((dayIndex) => this.dayValues[dayIndex].substring(0, 2));
+
+			if (isOrdered) {
+				return days[0] + " - " + days.slice(-1);
+			}
+			return days.join(", ");
 		}
 	},
+
+	computed: {
+		canSaveComp: function() {
+			return this.$refs.selection.activeValues.length > 0;
+		}
+	},
+
+	mounted() {
+		this.canSave = this.canSaveComp;
+	}
 };
 </script>
 

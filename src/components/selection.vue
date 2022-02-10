@@ -1,6 +1,6 @@
 <template>
 	<div class="selector d-flex ion-justify-content-evenly">
-		<div v-for="(data, i) in data" :key="i" class="data" @click="toggleTagFilter(i)" :class="{'active' : activeValues.includes(i) }">
+		<div v-for="(data, i) in values" :key="i" class="data" @click="toggleTagFilter(i)" :class="{'active' : activeValues.includes(i) }">
 			<div class="name-wrapper">
 				<p>{{data}}</p>
 			</div>
@@ -11,11 +11,11 @@
 
 <script>
 export default {
-
 	props: {
-		data: [],
-		values: [],
-		multiselection: true
+		values: {
+			type: Array
+		}
+		// multiselection: true
 	},
 
 	data() {
@@ -26,34 +26,30 @@ export default {
 
 	methods: {
 		toggleTagFilter(velue) {
-			if (!this.multiselection)
-			{
-				selectedValues = [value];
-				return;
-			}
+			// if (!this.multiselection)
+			// {
+			// 	selectedValues = [value];
+			// 	return;
+			// }
 
-            if (this.selectedValues.includes(velue)) {
-                this.selectedValues = this.selectedValues.filter(item => item != velue);
+            if (this.activeValues.includes(velue)) {
+                this.activeValues = this.activeValues.filter(item => item != velue);
             } else {
-                this.selectedValues.push(velue);
+                this.activeValues.push(velue);
             }
         },
 	},
 
 	computed: {
 		selectedValues: function() {
-			var selected = [];
-			for (const element of this.activeValues.sort()) {
-				selected.push(element);
-			}
-			return selected;
+			return this.activeValues.sort();
 		}
 	}
 }
 </script>
 
 <style lang="scss" scoped>
-selector {
+.selector {
 	padding: 10px 0;
 	// box-shadow: 0px 0px 15px -5px rgba(0, 0, 0, 0.3);
 	border-radius: 10px;
