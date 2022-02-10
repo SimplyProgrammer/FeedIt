@@ -37,6 +37,17 @@ export default {
 	// 	},
 	// },
 
+	props: {
+		time: {
+			type: String,
+			default: "08:00"
+		},
+		selectedDays: {
+			type: Array,
+			default: []
+		},
+	},
+
 	components: {
 		Selection
 	},
@@ -61,8 +72,13 @@ export default {
 				"Sobota", 
 				"Nedela"
 			],
-			time: "08:30"
+			time: "08:30",
 		}
+	},
+
+	created() {
+		this.modalTime = this.time
+		this.modalSelectedDays = this.selectedDays
 	},
 
 	methods: {
@@ -86,7 +102,6 @@ export default {
 			}
 
 			let isOrdered = true;
-			
 			selectedDays.forEach((day, index) => {
 				if (selectedDays[index + 1] && day + 1 != selectedDays[index + 1]) {
 					isOrdered = false;

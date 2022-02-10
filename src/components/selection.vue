@@ -13,15 +13,24 @@
 export default {
 	props: {
 		values: {
-			type: Array
+			type: Array,
+			default: []
+		},
+		activeValues: {
+			type: Array,
+			default: []
 		}
 		// multiselection: true
 	},
 
 	data() {
 		return {
-			activeValues: []
+			localActiveValues: []
 		}
+	},
+
+	created() {
+		this.localActiveValues = this.activeValues;
 	},
 
 	methods: {
@@ -32,17 +41,17 @@ export default {
 			// 	return;
 			// }
 
-            if (this.activeValues.includes(velue)) {
-                this.activeValues = this.activeValues.filter(item => item != velue);
+            if (this.localActiveValues.includes(velue)) {
+                this.localActiveValues = this.localActiveValues.filter(item => item != velue);
             } else {
-                this.activeValues.push(velue);
+                this.localActiveValues.push(velue);
             }
         },
 	},
 
 	computed: {
 		selectedValues: function() {
-			return this.activeValues.sort();
+			return this.localActiveValues.sort();
 		}
 	}
 }

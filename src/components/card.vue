@@ -18,7 +18,7 @@
 			<ion-icon :icon="icons.add" slot="end" @click="openPlanModal()"></ion-icon>
 		</ion-item>
 
-		<div v-for="(plan, i) in plans" :key="i" class="plan d-flex ion-justify-content-between ion-align-items-center">
+		<div v-for="(plan, i) in plans" :key="i" class="plan d-flex ion-justify-content-between ion-align-items-center" @click.self="openPlanEditModal(i)">
 			<p>{{plan.days}}</p>
 			<div class="d-flex ion-align-items-center">
 				<p>{{plan.time}}</p>
@@ -46,13 +46,33 @@ export default {
 				initialBreakpoint: 1
 			});
 			this.addPlanModal.present();
-			const { data } = await this.addPlanModal.onDidDismiss();
 
+			const { data } = await this.addPlanModal.onDidDismiss();
 			if (!data) 
 				return;
 
 			const {days, time} = data;
 			this.plans.push({days, time});
+		},
+
+		async openPlanEditModal(index) {
+			this.addPlanModal = await this.modalController.create({
+				component: AddPlanModal,
+				breakpoints: [0, 1],
+				initialBreakpoint: 1,
+				componentProps: {
+					time: this.plans[index].time
+				}
+			});
+			this.addPlanModal.present();
+			console.log(this.addPlanModal);
+
+			const { data } = await this.addPlanModal.onDidDismiss();
+			if (!data) 
+				return;
+
+			const {days, time} = data;
+			this.plans[index] = {days, time};
 		},
 	},
 }
