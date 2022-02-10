@@ -21,40 +21,10 @@ ion-modal {
 	.content {
 		width: 100%;
 		height: fit-content;
-	}
 
-	.day-selector {
-		border: 1px solid rgba(0, 0, 0, .2);
-		padding: 10px 0;
-		border-radius: 10px;
-
-		.day {
-			display: flex;
-			flex-direction: column;
-			align-items: center;
-
-			.active-day {
-				background-color: #3880ff;
-			}
-		
-			.day-name-wrapper {
-				width: 30px;
-				height: 30px;
-				display: flex;
-				justify-content: center;
-				align-items: center;
-				border-radius: 50px;
-			}
-
-			p {
-				margin: 0;
-			}
-
-			ion-icon {
-				margin-top: 10px;
-				width: 5px;
-				height: 5px;
-			}
+		h4 {
+			font-size: 20px;
+			margin: 0 0 10px;
 		}
 	}
 	
@@ -63,7 +33,7 @@ ion-modal {
 		margin-top: 50px;
 
 		ion-button {
-			width: 100%;
+			flex: 1;
 		}
 	}
 }

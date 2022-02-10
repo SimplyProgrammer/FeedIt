@@ -18,10 +18,10 @@
 			<ion-icon :icon="icons.add" slot="end" @click="openPlanModal()"></ion-icon>
 		</ion-item>
 
-		<div class="plan d-flex ion-justify-content-between ion-align-items-center">
-			<p>Pondelok:</p>
+		<div v-for="(plan, i) in plans" :key="i" class="plan d-flex ion-justify-content-between ion-align-items-center">
+			<p>{{plan.days}}</p>
 			<div class="d-flex ion-align-items-center">
-				<p>8:00</p>
+				<p>{{plan.time}}</p>
 				<ion-toggle></ion-toggle>
 			</div>
 		</div>
@@ -32,14 +32,27 @@
 import AddPlanModal from '@/components/add-plan-modal.vue'
 
 export default {
+	data() {
+		return {
+			plans: []
+		}
+	},
+
 	methods: {
 		async openPlanModal() {
-			const addPlanModal = await this.modalController.create({
+			this.addPlanModal = await this.modalController.create({
 				component: AddPlanModal,
 				breakpoints: [0, 1],
 				initialBreakpoint: 1
 			});
-			return addPlanModal.present();
+			this.addPlanModal.present();
+			const { data } = await this.addPlanModal.onDidDismiss();
+
+			if (!data) 
+				return;
+
+			const {days, time} = data;
+			this.plans.push({days, time});
 		},
 	},
 }
