@@ -16,19 +16,17 @@ import '@ionic/vue/css/text-transformation.css';
 import '@ionic/vue/css/flex-utils.css';
 import '@ionic/vue/css/display.css';
 
-//swiper
-import 'swiper/swiper-bundle.min.css'
-import 'swiper/swiper.min.css'
-import 'swiper/components/navigation/navigation.min.css'
-import 'swiper/components/pagination/pagination.min.css'
-
 import './theme/variables.css'
 import './theme/styles.scss'
 
 import * as IonComponents from '@ionic/vue'; //Ionic components
 import * as AllIcons from "ionicons/icons"; //Ion icons bs
 
-import { Swiper, SwiperSlide } from 'swiper/vue'; //Swiper component
+import "swiper/swiper-bundle.min.css" //swiper css
+import { Swiper, SwiperSlide } from "swiper/vue/swiper-vue.js";
+import SwiperCore, { Pagination, Scrollbar } from "swiper"; //import swiper core and plugins
+SwiperCore.use([Pagination, Scrollbar]); //declare two plugins
+
 import '@vaadin/vaadin';
 
 import { modalController } from "@ionic/vue"; //modalController...

@@ -1,8 +1,8 @@
 <template>
 	<ion-header>
 		<ion-toolbar>
-			<img v-if="leftImg" :src="data.leftImg" slot="start">
-			<img v-else src="@/assets/imgs/avatar.svg" slot="start">
+			<img v-if="leftImg" :src="data.leftImg" slot="start" @click="$emit('profileClicked')">
+			<img v-else src="@/assets/imgs/avatar.svg" slot="start" @click="$emit('profileClicked')">
 
 			<ion-title>FeedIt</ion-title>
 			

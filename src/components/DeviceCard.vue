@@ -3,7 +3,7 @@
 		<ion-card-header>
 			<img src="@/assets/imgs/krmitko1.png" alt="">
 			<div class="description">
-				<h1>{{data.name}}</h1>
+				<h1>{{name}}</h1>
 				<div class="w-fit d-flex ion-align-items-center margin-auto">
 					<p>Status:</p>
 					<div class="indicator"></div>
@@ -11,7 +11,7 @@
 			</div>
 		</ion-card-header>
 
-		<ion-button expand="block" class="mb-3">Spustit teraz</ion-button>
+		<ion-button expand="block" class="mb-3" mode="md">Spustit teraz</ion-button>
 
 		<ion-item lines="none" class="add-plan mb-2">
 			<h2>Časové plány</h2>
@@ -33,8 +33,8 @@ import AddPlanModal from '@/components/add-plan-modal.vue'
 
 export default {
 	props: {
-		data: {
-			type: Object
+		name: {
+			type: String
 		}
 	},
 
@@ -72,5 +72,8 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-
+ion-button {
+	height: 45px;
+	--border-radius: 14px;
+}
 </style>

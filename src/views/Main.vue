@@ -2,10 +2,11 @@
 	<ion-page>
 		<Header @addClicked="openDeviceModal" ref="header"/>
 		<ion-content>
-			<swiper :modules="[Navigation, Pagination, Scrollbar, A11y]" :slides-per-view="1" :space-between="0" class="swiper" ref="swiper">
+			<swiper v-bind="swiperSettings" ref="">
 				<swiper-slide v-for="(device, i) in deviceProfiles" :key="i">
-					<DeviceCard :data="device"/>
+					<DeviceCard v-bind="device"/>
 				</swiper-slide>
+				<div class="swiper-pagination swiper-pagination-bullets" slot="pagination"></div>
 			</swiper>
 		</ion-content>
 	</ion-page>
@@ -13,7 +14,6 @@
 
 <script>
 import Header from '@/components/Header.vue';
-// import { Navigation, Pagination, Scrollbar, A11y } from 'swiper';
 import DeviceCard from '@/components/DeviceCard.vue';
 import AddDeviceModal from '@/components/add-device-modal.vue';
 
@@ -22,10 +22,6 @@ export default {
 		Header,
 		DeviceCard,
 		AddDeviceModal,
-		// Navigation,
-		// Pagination,
-		// Scrollbar,
-		// A11y
 	},
 
 	data() {
@@ -35,6 +31,19 @@ export default {
 					name: "XY Feeder"
 				}
 			],
+			swiperSettings: {
+				slidesPerView: 1,
+				spaceBetween: 40,
+				// loop: true,
+				pagination: {
+					clickable: true,
+					renderBullet: function (index, className) {
+						return '<span class="' + className + '">' + (index + 1) + "</span>";
+					},
+				}, 
+				// navigation: true,
+				
+			}
 		}
 	},
 
@@ -51,22 +60,17 @@ export default {
 			if (!data) 
 				return;
 
+			// this.slideTo(this.deviceProfiles.length-1);
 			this.deviceProfiles.push(data);
 		},
 
-		add()
-		{
-			this.deviceProfiles.push({
-				name: this.deviceName,
-				ip: this.deviceIp,
-			});
+		slideTo(i) {
+			this.$refs.appSwiper.swiper.slideTo(i, 0);
 		}
 	},
 }
 </script>
 
 <style lang="scss" scoped>
-.swiper {
-	height: 100%;
-}
+
 </style>
