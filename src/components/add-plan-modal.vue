@@ -12,7 +12,7 @@
 
 		<div class="buttons-wrapper">
 			<ion-button color="secondary" @click="$refs.modal.closeModal()" ref="cancel">Zrušiť</ion-button>
-			<ion-button color="secondary" @click="saveModal()" :disabled="!canSave" ref="save">Uložiť</ion-button>
+			<ion-button color="tertiary" @click="saveModal()" :disabled="!canSave" ref="save">Uložiť</ion-button>
 		</div>
 	</Modal>
 </template>

@@ -11,7 +11,7 @@
 			</div>
 		</ion-card-header>
 
-		<ion-button expand="block" class="mb-3" mode="md">Spustit teraz</ion-button>
+		<ion-button expand="block" class="mb-3" color="tertiary">Spustit teraz</ion-button>
 
 		<ion-item lines="none" class="add-plan mb-2">
 			<h2>Časové plány</h2>
@@ -35,6 +35,10 @@ export default {
 	props: {
 		name: {
 			type: String
+		},
+
+		deviceProfiles: {
+			type: Array
 		}
 	},
 
@@ -72,8 +76,4 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-ion-button {
-	height: 45px;
-	--border-radius: 14px;
-}
 </style>

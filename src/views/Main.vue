@@ -4,9 +4,9 @@
 		<ion-content>
 			<swiper v-bind="swiperSettings" ref="">
 				<swiper-slide v-for="(device, i) in deviceProfiles" :key="i">
-					<DeviceCard v-bind="device"/>
+					<DeviceCard :class="{'full-height' : Object.keys(deviceProfiles).length == 1}" v-bind="device" />
 				</swiper-slide>
-				<div class="swiper-pagination swiper-pagination-bullets" slot="pagination"></div>
+				<!-- <div class="swiper-pagination swiper-pagination-bullets" slot="pagination"></div> -->
 			</swiper>
 		</ion-content>
 	</ion-page>
@@ -31,15 +31,16 @@ export default {
 					name: "XY Feeder"
 				}
 			],
+
 			swiperSettings: {
 				slidesPerView: 1,
 				spaceBetween: 40,
 				// loop: true,
 				pagination: {
 					clickable: true,
-					renderBullet: function (index, className) {
-						return '<span class="' + className + '">' + (index + 1) + "</span>";
-					},
+					// renderBullet: function (index, className) {
+					// 	return '<span class="' + className + '">' + (index + 1) + "</span>";
+					// },
 				}, 
 				// navigation: true,
 				
@@ -52,7 +53,10 @@ export default {
 			this.addDeviceModal = await this.modalController.create({
 				component: AddDeviceModal,
 				breakpoints: [0, 1],
-				initialBreakpoint: 1
+				initialBreakpoint: 1,
+				componentProps: {
+					deviceProfiles: this.deviceProfiles
+				}
 			});
 			this.addDeviceModal.present();
 
