@@ -2,7 +2,7 @@
 	<ion-page>
 		<Header @addClicked="openDeviceModal" ref="header"/>
 		<ion-content>
-			<swiper v-bind="swiperSettings" ref="">
+			<swiper v-bind="swiperSettings" ref="deviceSwiper">
 				<swiper-slide v-for="(device, i) in deviceProfiles" :key="i">
 					<DeviceCard :class="{'full-height' : Object.keys(deviceProfiles).length == 1}" v-bind="device" />
 				</swiper-slide>
@@ -28,7 +28,8 @@ export default {
 		return {
 			deviceProfiles: [
 				{
-					name: "XY Feeder"
+					name: "XY Feeder",
+					plans: []
 				}
 			],
 
@@ -64,12 +65,11 @@ export default {
 			if (!data) 
 				return;
 
-			// this.slideTo(this.deviceProfiles.length-1);
+			data.plans ??= [];
 			this.deviceProfiles.push(data);
-		},
 
-		slideTo(i) {
-			this.$refs.appSwiper.swiper.slideTo(i, 0);
+			const swiper = this.$refs.deviceSwiper.$el.swiper;
+			setTimeout(() => swiper.slideTo(this.deviceProfiles.length, 400), 10);
 		}
 	},
 }

@@ -18,13 +18,15 @@
 			<ion-icon :icon="icons.add" slot="end" @click="openPlanModal()"></ion-icon>
 		</ion-item>
 
-		<div v-for="(plan, i) in plans" :key="i" class="plan d-flex ion-justify-content-between ion-align-items-center" @click.self="openPlanModal(i)">
-			<p>{{plan.formatedDays}}</p>
-			<div class="d-flex ion-align-items-center">
-				<p>{{plan.time}}</p>
-				<ion-toggle v-model="plan.active"></ion-toggle>
+		<transition-group name="fade">
+			<div v-for="(plan, i) in plans" :key="i" class="plan d-flex ion-justify-content-between ion-align-items-center swiper-no-swiping" @click.self="openPlanModal(i)">
+				<p>{{plan.formatedDays}}</p>
+				<div class="d-flex ion-align-items-center">
+					<p>{{plan.time}}</p>
+					<ion-toggle v-model="plan.active"></ion-toggle>
+				</div>
 			</div>
-		</div>
+		</transition-group>
 	</ion-card>
 </template>
 
@@ -39,13 +41,11 @@ export default {
 
 		deviceProfiles: {
 			type: Array
-		}
-	},
+		},
 
-	data() {
-		return {
-			plans: []
-		}
+		plans: {
+			type: Array
+		},
 	},
 
 	methods: {
@@ -55,8 +55,8 @@ export default {
 				breakpoints: [0, 1],
 				initialBreakpoint: 1,
 				componentProps: {
-					time: index == -1 ? undefined : this.plans[index].time,
-					selectedDays: index == -1 ? undefined : this.plans[index].days,
+					time: index == -1 ? (this.plans[this.plans.length-1]?.time ?? "08:30") : this.plans[index].time,
+					selectedDays: index == -1 ? (this.plans[this.plans.length-1]?.days ?? []) : this.plans[index].days,
 				}
 			});
 			this.addPlanModal.present();

@@ -1,9 +1,9 @@
 <template>
 	<Modal title="Nove zariadenie" ref="modal">
 		<h4>Nazov zariadenia:</h4>
-		<ion-input type="text" placeholder="Nazov..." v-model="name" class="ion-padding"></ion-input>
+		<ion-input type="text" placeholder="Nazov..." v-model="name" class="ion-padding" :class="{invalid : this.deviceProfiles.some(elm => elm.name == this.name)}"></ion-input>
 		<h4 class="mt-1">Ip adresa:</h4>
-		<ion-input type="text" placeholder="Ip adresa..." v-model="ip" class="ion-padding"></ion-input>
+		<ion-input type="text" placeholder="Ip adresa..." v-model="ip" class="ion-padding" :class="{invalid : this.deviceProfiles.some(elm => elm.ip == this.ip)}"></ion-input>
 
 		<div class="buttons-wrapper">
 			<ion-button color="secondary" @click="$refs.modal.closeModal()">Zrusit</ion-button>
@@ -41,13 +41,15 @@ export default {
 
 	methods: {
 		async saveModal() {
-			var message = !(this.name && this.ip) ? "Prosim vyplnte vsetky udaje!" : (this.deviceProfiles.some(elm => elm.name == this.name || elm.ip == this.ip) ? "Toto zariadenie uz existuje!" : undefined);
+			var message = !(this.name && this.ip) ? "Prosim vyplnte vsetky udaje!" : 
+							this.deviceProfiles.some(elm => elm.name == this.name) ? "Zariadenie s tymto nazvom uz exsistuje!" : 
+							this.deviceProfiles.some(elm => elm.ip == this.ip) ? "Zariadenie s touto IP uz existuje!" : undefined;
 			if (message)
 			{
 				const toast = await toastController.create({
 					color: "danger",
 					message: message,
-					duration: 3000
+					duration: 2500
 				});
 				return toast.present();
 			}
@@ -64,16 +66,5 @@ export default {
 <style lang="scss" scoped>
 h4 {
 	margin-bottom: 0px;
-}
-
-.error {
-	width: 100%;
-	height: fit-content;
-	margin-top: 25px;
-	border-radius: 20px;
-	padding: 10px;
-	background: var(--ion-color-danger);
-	color: white;
-	box-shadow: 0px 0px 15px -4px var(--ion-color-danger);
 }
 </style>

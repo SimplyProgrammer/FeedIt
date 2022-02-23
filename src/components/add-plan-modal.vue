@@ -12,7 +12,7 @@
 
 		<div class="buttons-wrapper">
 			<ion-button color="secondary" @click="$refs.modal.closeModal()" ref="cancel">Zrušiť</ion-button>
-			<ion-button color="tertiary" @click="saveModal()" :disabled="!canSave" ref="save">Uložiť</ion-button>
+			<ion-button color="tertiary" @click="saveModal()" ref="save">Uložiť</ion-button>
 		</div>
 	</Modal>
 </template>
@@ -20,6 +20,7 @@
 <script>
 import Selection from '@/components/selection.vue';
 import Modal from '@/components/Modal.vue';
+import { toastController } from '@ionic/vue';
 
 export default {
 
@@ -50,7 +51,6 @@ export default {
 				"Sobota", 
 				"Nedela"
 			],
-			canSave: false
 		}
 	},
 
@@ -60,15 +60,26 @@ export default {
 	},
 
 	methods: {
-		saveModal() {
+		async saveModal() {
 			const days = this.$refs.selection.selectedValues;
-			if (days.length) {
-				this.modalController.dismiss({
-					days: days,
-					formatedDays: this.formatSelection(days),
-					time: this.modalTime,
+
+			var message = days.length <= 0 ? "Prosim vyberte aspon 1 den!" : undefined;
+
+			if (message)
+			{
+				const toast = await toastController.create({
+					color: "danger",
+					message: message,
+					duration: 2500
 				});
+				return toast.present();
 			}
+
+			this.modalController.dismiss({
+				days: days,
+				formatedDays: this.formatSelection(days),
+				time: this.modalTime,
+			});
 		},
 
 		daySelectionChange() {
@@ -95,10 +106,6 @@ export default {
 			return days.join(", ");
 		}
 	},
-
-	mounted() {
-		this.canSave = this.selectedDays.length > 0;
-	}
 };
 </script>
 
