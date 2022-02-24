@@ -2,12 +2,28 @@
 	<ion-page>
 		<Header @addClicked="openDeviceModal" ref="header"/>
 		<ion-content>
-			<swiper v-bind="swiperSettings" ref="deviceSwiper">
-				<swiper-slide v-for="(device, i) in deviceProfiles" :key="i">
-					<DeviceCard :class="{'full-height' : Object.keys(deviceProfiles).length == 1}" v-bind="device" />
-				</swiper-slide>
-				<!-- <div class="swiper-pagination swiper-pagination-bullets" slot="pagination"></div> -->
-			</swiper>
+			<div class="wh-100">
+				<!-- <ion-fab horizontal="end" vertical="top" slot="fixed">
+					<ion-fab-button>
+						<ion-icon :icon="icons.menu"></ion-icon>
+					</ion-fab-button>
+					<ion-fab-list>
+						<ion-fab-button color="light">
+							<ion-icon :icon="icons.create"></ion-icon>
+						</ion-fab-button>
+						<ion-fab-button color="light">
+							<ion-icon :icon="icons.trash"></ion-icon>
+						</ion-fab-button>
+					</ion-fab-list>
+				</ion-fab> -->
+
+				<swiper v-bind="swiperSettings" ref="deviceSwiper">
+					<swiper-slide v-for="(device, i) in deviceProfiles" :key="i">
+						<DeviceCard :class="{'full-height' : Object.keys(deviceProfiles).length == 1}" v-bind="device" />
+					</swiper-slide>
+					<!-- <div class="swiper-pagination swiper-pagination-bullets" slot="pagination"></div> -->
+				</swiper>
+			</div>
 		</ion-content>
 	</ion-page>
 </template>
@@ -29,6 +45,7 @@ export default {
 			deviceProfiles: [
 				{
 					name: "XY Feeder",
+					ip: "Najlepsia ipcka na svete",
 					plans: []
 				}
 			],
