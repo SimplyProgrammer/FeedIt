@@ -1,29 +1,28 @@
 <template>
 	<ion-page>
-		<Header @addClicked="openDeviceModal" ref="header"/>
+		<Header @addClicked="openDeviceModal()" ref="header"/>
 		<ion-content>
-			<div class="wh-100">
-				<!-- <ion-fab horizontal="end" vertical="top" slot="fixed">
-					<ion-fab-button>
-						<ion-icon :icon="icons.menu"></ion-icon>
-					</ion-fab-button>
-					<ion-fab-list>
-						<ion-fab-button color="light">
-							<ion-icon :icon="icons.create"></ion-icon>
-						</ion-fab-button>
-						<ion-fab-button color="light">
-							<ion-icon :icon="icons.trash"></ion-icon>
-						</ion-fab-button>
-					</ion-fab-list>
-				</ion-fab> -->
-
-				<swiper v-bind="swiperSettings" ref="deviceSwiper">
-					<swiper-slide v-for="(device, i) in deviceProfiles" :key="i">
-						<DeviceCard :class="{'full-height' : Object.keys(deviceProfiles).length == 1}" v-bind="device" />
-					</swiper-slide>
-					<!-- <div class="swiper-pagination swiper-pagination-bullets" slot="pagination"></div> -->
-				</swiper>
-			</div>
+			<transition-group name="fade">
+				<div v-if="deviceProfiles.length" class="wh-100">
+					<swiper v-bind="swiperSettings" ref="deviceSwiper">
+						<swiper-slide v-for="(device, i) in deviceProfiles" :key="i">
+							<DeviceCard v-bind="device" :class="{'full-height' : Object.keys(deviceProfiles).length == 1}" @removeRequest="confirmDeviceDelete(i)" @editRequest="openDeviceModal(i)"/>
+						</swiper-slide>
+						<!-- <div class="swiper-pagination swiper-pagination-bullets" slot="pagination"></div> -->
+					</swiper>
+				</div>
+				<div v-else class="instructions">
+					<h1>Vytajte!</h1>
+					<div class="ion-padding" @click="openDeviceModal()">
+						<h4>Nove zaradenie!</h4>
+						<p>Pridajte vase zariadenie pre jednoduche nastavenie casovych planov!</p>
+					</div>
+					<div class="ion-padding">
+						<h4>Uzivatelsky ucet!</h4>
+						<p>Prihlaste sa alebo vytvorte vas uzivatelsky ucet pre synchronizaciu vasich dat na vsetkych vasich zariadeniach!</p>
+					</div>
+				</div>
+			</transition-group>
 		</ion-content>
 	</ion-page>
 </template>
@@ -32,6 +31,8 @@
 import Header from '@/components/Header.vue';
 import DeviceCard from '@/components/DeviceCard.vue';
 import AddDeviceModal from '@/components/add-device-modal.vue';
+
+import { alertController } from '@ionic/vue';
 
 export default {
 	components: {
@@ -43,11 +44,6 @@ export default {
 	data() {
 		return {
 			deviceProfiles: [
-				{
-					name: "XY Feeder",
-					ip: "Najlepsia ipcka na svete",
-					plans: []
-				}
 			],
 
 			swiperSettings: {
@@ -67,12 +63,33 @@ export default {
 	},
 
 	methods: {
-		async openDeviceModal() {
+		async confirmDeviceDelete(index) {
+			const confirm = await alertController.create({
+				header: "Vymazat zariadenie?",
+				message: "Naozaj chcete trvalo odstranit toto zariadenie a vsetky jeho casove plany?",
+				buttons: [
+					"Zrusit", 
+					{
+						text: "Potvrdit",
+						handler: () => {
+							this.deviceProfiles.splice(index, 1);
+						},
+					}
+				],
+			});
+
+       		await confirm.present();
+		},
+
+		async openDeviceModal(index = -1) {
 			this.addDeviceModal = await this.modalController.create({
 				component: AddDeviceModal,
 				breakpoints: [0, 1],
 				initialBreakpoint: 1,
 				componentProps: {
+					device: index == -1 ? undefined : this.deviceProfiles[index],
+					name: index == -1 ? "" : this.deviceProfiles[index].name,
+					ip: index == -1 ? "" : this.deviceProfiles[index].ip,
 					deviceProfiles: this.deviceProfiles
 				}
 			});
@@ -82,16 +99,45 @@ export default {
 			if (!data) 
 				return;
 
-			data.plans ??= [];
-			this.deviceProfiles.push(data);
+			if (index == -1)
+			{
+				this.deviceProfiles.push(data);
 
-			const swiper = this.$refs.deviceSwiper.$el.swiper;
-			setTimeout(() => swiper.slideTo(this.deviceProfiles.length, 400), 10);
+				if (this.deviceProfiles.length > 1)
+				{
+					const swiper = this.$refs.deviceSwiper.$el.swiper;
+					setTimeout(() => swiper.slideTo(this.deviceProfiles.length, 400), 10);
+				}
+			}
+			else
+			{
+				this.deviceProfiles[index].name = data.name;
+				this.deviceProfiles[index].ip = data.ip;
+			}
 		}
 	},
 }
 </script>
 
 <style lang="scss" scoped>
+.instructions {
+	text-align: center;
 
+	h1 { 
+		font-size: 32px;
+		font-weight: 900;
+		margin-top: 12px;
+		padding-bottom: 12px;
+		border-bottom: 1px solid lightgray;
+	}
+
+	h4 { 
+		font-weight: bold;
+		margin-bottom: 5px;
+	}
+
+	p {
+		margin: 0;
+	}
+}
 </style>

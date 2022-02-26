@@ -5,10 +5,10 @@
 				<ion-icon :icon="icons.menu"></ion-icon>
 			</ion-fab-button>
 			<ion-fab-list>
-				<ion-fab-button color="light">
+				<ion-fab-button color="light" @click="$emit('editRequest')">
 					<ion-icon :icon="icons.create"></ion-icon>
 				</ion-fab-button>
-				<ion-fab-button color="light">
+				<ion-fab-button color="light" @click="$emit('removeRequest')">
 					<ion-icon :icon="icons.trash"></ion-icon>
 				</ion-fab-button>
 			</ion-fab-list>
@@ -61,12 +61,13 @@ export default {
 
 		deviceProfiles: {
 			type: Array
-		},
+		}
+	},
 
-		plans: {
-			type: Array,
-			default: []
-		},
+	data() {
+		return {
+			plans: []
+		}
 	},
 
 	watch: {

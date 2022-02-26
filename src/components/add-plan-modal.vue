@@ -7,12 +7,12 @@
 			</div>
 
 			<h4>Vyberte dni:</h4>
-			<Selection :values="days.map(day => day.substring(0, 1))" @selected="daySelectionChange" ref="selection"/>
+			<Selection :values="days.map(day => day.substring(0, 1))" ref="selection"/>
 		</div>
 
 		<div class="buttons-wrapper">
 			<ion-button color="secondary" @click="$refs.modal.closeModal()" ref="cancel">Zrušiť</ion-button>
-			<ion-button color="tertiary" @click="saveModal()" ref="save">Uložiť</ion-button>
+			<ion-button color="tertiary" @click="saveModal()" ref="save">Potvrdit</ion-button>
 		</div>
 	</Modal>
 </template>
@@ -80,10 +80,6 @@ export default {
 				formatedDays: this.formatSelection(days),
 				time: this.modalTime,
 			});
-		},
-
-		daySelectionChange() {
-			this.canSave = this.$refs.selection.activeValues.length > 0; 
 		},
 
 		formatSelection(selectedIndexes) {

@@ -1,13 +1,13 @@
 <template>
-	<Modal title="Nove zariadenie" ref="modal">
+	<Modal :title="device ? 'Zariadenie' : 'Nove zariadenie'" ref="modal">
 		<h4>Nazov zariadenia:</h4>
-		<ion-input type="text" placeholder="Nazov..." v-model="name" class="ion-padding" :class="{invalid : this.deviceProfiles.some(elm => elm.name == this.name)}"></ion-input>
+		<ion-input type="text" placeholder="Nazov..." v-model.trim="name" class="ion-padding" :class="{invalid : isNameInvalid()}"></ion-input>
 		<h4 class="mt-1">Ip adresa:</h4>
-		<ion-input type="text" placeholder="Ip adresa..." v-model="ip" class="ion-padding" :class="{invalid : this.deviceProfiles.some(elm => elm.ip == this.ip)}"></ion-input>
+		<ion-input type="text" placeholder="Ip adresa..." v-model.trim="ip" class="ion-padding" :class="{invalid : isIpInvalid()}"></ion-input>
 
 		<div class="buttons-wrapper">
 			<ion-button color="secondary" @click="$refs.modal.closeModal()">Zrusit</ion-button>
-			<ion-button color="tertiary" @click="saveModal()">Pridat</ion-button>
+			<ion-button color="tertiary" @click="saveModal()">Potvrdit</ion-button>
 		</div>
 
 		<!-- <div v-if="!(name && ip)" class="error">
@@ -26,24 +26,41 @@ export default {
 	},
 
 	props: {
+		name: {
+			type: String,
+			default: ""
+		},
+
+		ip: {
+			type: String,
+			default: ""
+		},
+
+		device: {
+			type: Object,
+			default: undefined
+		},
+
 		deviceProfiles: {
 			type: Array,
 			default: []
 		}
 	},
 
-	data() {
-		return {
-			name: "",
-			ip: ""
-		}
-	},
-
 	methods: {
+		isNameInvalid() {
+			return this.deviceProfiles.some(elm => elm.name == this.name) && this.name != this.device?.name;
+		},
+
+		isIpInvalid() {
+			return this.deviceProfiles.some(elm => elm.ip == this.ip) && this.ip != this.device?.ip
+		},
+
 		async saveModal() {
 			var message = !(this.name && this.ip) ? "Prosim vyplnte vsetky udaje!" : 
-							this.deviceProfiles.some(elm => elm.name == this.name) ? "Zariadenie s tymto nazvom uz exsistuje!" : 
-							this.deviceProfiles.some(elm => elm.ip == this.ip) ? "Zariadenie s touto IP uz existuje!" : undefined;
+							this.isNameInvalid() ? "Zariadenie s tymto nazvom uz exsistuje!" : 
+							this.isIpInvalid() ? "Zariadenie s touto IP uz existuje!" : undefined;
+
 			if (message)
 			{
 				const toast = await toastController.create({
