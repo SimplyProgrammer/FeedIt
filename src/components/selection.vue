@@ -1,6 +1,6 @@
 <template>
 	<div class="selector d-flex ion-justify-content-evenly">
-		<div v-for="(data, i) in values" :key="i" class="data" @click="toggleTagFilter(i)" :class="{'active' : activeValues.includes(i) }">
+		<div v-for="(data, i) in values" :key="i" class="data d-flex ion-align-items-center" @click="toggleTagFilter(i)" :class="{'active' : activeValues.includes(i) }">
 			<div class="name-wrapper">
 				<p>{{data}}</p>
 			</div>
@@ -20,7 +20,6 @@ export default {
 			type: Boolean,
 			default: true
 		},
-
 	},
 
 	data() {
@@ -37,11 +36,12 @@ export default {
 				return;
 			}
 
-            if (this.activeValues.includes(velue)) {
-                this.activeValues = this.activeValues.filter(item => item != velue);
-            } else {
+			var index = this.activeValues.indexOf(velue);
+            if (index > -1)
+                this.activeValues.splice(index, 1);
+            else 
                 this.activeValues.push(velue);
-            }
+            
 			this.$emit("selected", this.activeValues);
         },
 	},
@@ -61,9 +61,7 @@ export default {
 	border-radius: 10px;
 
 	.data {
-		display: flex;
 		flex-direction: column;
-		align-items: center;
 
 		&.active {
 			.name-wrapper {

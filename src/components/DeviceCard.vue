@@ -1,5 +1,5 @@
 <template>
-	<ion-card>
+	<ion-card class="device-card">
 		<ion-fab>
 			<ion-fab-button>
 				<ion-icon :icon="icons.menu"></ion-icon>
@@ -74,7 +74,7 @@ export default {
 		plans: {
 			handler: function (val, oldVal) {
 				console.log("Sending to: "+this.ip + " " + this.name);
-				console.log("Sending this data: "+val);
+				console.log(val);
 			},
 			deep: true
 		}
@@ -88,7 +88,7 @@ export default {
 				initialBreakpoint: 1,
 				componentProps: {
 					time: index == -1 ? "08:30" : this.plans[index].time,
-					selectedDays: index == -1 ? (this.plans[this.plans.length-1]?.days ?? []) : this.plans[index].days,
+					selectedDays: [...index == -1 ? (this.plans[this.plans.length-1]?.days ?? []) : this.plans[index].days],
 				}
 			});
 			this.addPlanModal.present();

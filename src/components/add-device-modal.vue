@@ -1,7 +1,7 @@
 <template>
 	<Modal :title="device ? 'Zariadenie' : 'Nove zariadenie'" ref="modal">
 		<h4>Nazov zariadenia:</h4>
-		<ion-input type="text" placeholder="Nazov..." v-model.trim="name" class="ion-padding" :class="{invalid : isNameInvalid()}"></ion-input>
+		<ion-input type="text" placeholder="Nazov..." v-model.trim="name" class="ion-padding" :class="{invalid : isNameInvalid()}" ref="nameInput"></ion-input>
 		<h4 class="mt-1">Ip adresa:</h4>
 		<ion-input type="text" placeholder="Ip adresa..." v-model.trim="ip" class="ion-padding" :class="{invalid : isIpInvalid()}"></ion-input>
 
@@ -45,6 +45,10 @@ export default {
 			type: Array,
 			default: []
 		}
+	},
+
+	mounted() {
+		setTimeout(() => this.$refs.nameInput.$el.setFocus(), 800);
 	},
 
 	methods: {
