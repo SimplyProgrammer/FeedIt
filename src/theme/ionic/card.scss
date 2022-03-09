@@ -9,8 +9,15 @@
 
 	ion-fab {
 		position: absolute;
-		right:-6px;
-		top:-6px;
+		transform: scale(0.86);
+		right: -8px;
+		top: -8px;
+
+		ion-fab-list {
+			ion-icon {
+				font-size: 20px;
+			}
+		}
 	}
 
 	.content {

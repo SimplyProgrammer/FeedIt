@@ -62,6 +62,21 @@ export default {
 		}
 	},
 
+	created() {
+		var appData = JSON.parse(localStorage.getItem("appData"));
+		if (appData)
+			this.deviceProfiles = appData;
+	},
+
+	watch: {
+		deviceProfiles: {
+			handler: function (val, oldVal) {
+				localStorage.setItem("appData", JSON.stringify(val));
+			},
+			deep: true
+		}
+	},
+
 	methods: {
 		async confirmDeviceDelete(index) {
 			const confirm = await alertController.create({
@@ -101,6 +116,7 @@ export default {
 
 			if (index == -1)
 			{
+				data.plans = [];
 				this.deviceProfiles.push(data);
 
 				if (this.deviceProfiles.length > 1)

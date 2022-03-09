@@ -1,7 +1,7 @@
 <template>
 	<ion-card class="device-card">
 		<ion-fab>
-			<ion-fab-button>
+			<ion-fab-button color="tertiary" class="main-fab-btn">
 				<ion-icon :icon="icons.menu"></ion-icon>
 			</ion-fab-button>
 			<ion-fab-list>
@@ -61,12 +61,10 @@ export default {
 
 		deviceProfiles: {
 			type: Array
-		}
-	},
+		},
 
-	data() {
-		return {
-			plans: []
+		plans: {
+			type:Array
 		}
 	},
 
