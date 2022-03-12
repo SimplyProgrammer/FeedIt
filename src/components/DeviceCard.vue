@@ -28,20 +28,40 @@
 
 			<ion-button expand="block" class="mb-3" color="tertiary" @click.self="feed()">Spustit teraz</ion-button>
 
-			<ion-item lines="none" class="add-plan mb-2">
-				<h2>Časové plány</h2>
-				<ion-icon :icon="icons.add" slot="end" @click="openPlanModal()"></ion-icon>
-			</ion-item>
+			<ion-list lines="none">
+				<ion-list-header class="mb-2">
+					<ion-item>
+						<h2 slot="start">Časové plány</h2>
+						<ion-icon :icon="icons.add" slot="end" @click="openPlanModal()"></ion-icon>
+					</ion-item>
+				</ion-list-header>
 
-			<transition-group name="fade">
-				<div v-for="(plan, i) in plans" :key="i" class="plan d-flex ion-justify-content-between ion-align-items-center swiper-no-swiping" @click.self="openPlanModal(i)">
-					<p>{{plan.formatedDays}}</p>
-					<div class="d-flex ion-align-items-center">
-						<p>{{plan.time}}</p>
-						<ion-toggle v-model="plan.active"></ion-toggle>
-					</div>
-				</div>
-			</transition-group>
+				<transition-group name="list" tag="ion-reorder-group" class="swiper-no-swiping" @ionItemReorder="reorderPlans($event)" :disabled="false">
+					<ion-item-sliding v-for="(plan, i) in plans" :key="plan">
+						<ion-item @click.self="openPlanModal(i)">
+							<p slot="start">{{plan.formatedDays}}</p>
+							<div slot="end" class="d-flex ion-align-items-center">
+								<p>{{plan.time}}</p>
+								<ion-toggle v-model="plan.active"></ion-toggle>
+							</div>
+						</ion-item>
+
+						<ion-item-options side="start">
+							<ion-item-option color="secondary" class="start">
+								<ion-reorder>
+									<ion-icon :icon="icons.list"></ion-icon>
+								</ion-reorder>
+							</ion-item-option>
+						</ion-item-options>
+
+						<ion-item-options>
+							<ion-item-option color="danger" @click="removePlan(i)">
+								<ion-icon :icon="icons.trash"></ion-icon>
+							</ion-item-option>
+						</ion-item-options>
+					</ion-item-sliding>
+				</transition-group>
+			</ion-list>
 		</div>
 	</ion-card>
 </template>
@@ -100,6 +120,17 @@ export default {
 				this.plans.push(data);
 			else
 				this.plans[index] = data;
+		},
+
+		removePlan(index) {
+			console.log(index);
+			this.plans.splice(index, 1);
+		},
+
+		reorderPlans(ev) {
+			const itemMove = this.plans.splice(ev.detail.from, 1)[0];
+			this.plans.splice(ev.detail.to, 0, itemMove);
+			ev.detail.complete();
 		},
 
 		feed() {

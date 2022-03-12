@@ -2,10 +2,10 @@
 	<ion-page>
 		<Header @addClicked="openDeviceModal()" ref="header"/>
 		<ion-content>
-			<transition-group name="fade">
+			<transition-group name="list">
 				<div v-if="deviceProfiles.length" class="wh-100">
 					<swiper v-bind="swiperSettings" ref="deviceSwiper">
-						<swiper-slide v-for="(device, i) in deviceProfiles" :key="i">
+						<swiper-slide v-for="(device, i) in deviceProfiles" :key="device">
 							<DeviceCard v-bind="device" :class="{'full-height' : Object.keys(deviceProfiles).length == 1}" @removeRequest="confirmDeviceDelete(i)" @editRequest="openDeviceModal(i)"/>
 						</swiper-slide>
 						<!-- <div class="swiper-pagination swiper-pagination-bullets" slot="pagination"></div> -->

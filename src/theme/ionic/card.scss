@@ -15,7 +15,7 @@
 
 		ion-fab-list {
 			ion-icon {
-				font-size: 20px;
+				font-size: 22px;
 			}
 		}
 	}
@@ -51,35 +51,76 @@
 			}
 		}
 	
-		.add-plan {
-			h2 {
-				margin: 0;
-				font-size: 20px;
+		ion-list {
+			padding: 0 10px;
+			contain: unset;
+			position: relative;
+
+			ion-list-header {
+				padding: 0;
+
+				ion-item {
+					flex: 1;
+					width: 100%;
+					--padding-start: 10px;
+					--padding-end: 0px;
+					
+					h2 {
+						margin: 0;
+						font-size: 20px;
+					}
+
+					ion-icon {
+						margin: 0;
+					}
+				}
 			}
-		}
-	
-		.plan {
-			margin: 10px 10px;
-			// --padding-top: 15px;
-			// --padding-bottom: 15px;
-			// --padding-start: 20px;
-			// --padding-end: 20px;
-			padding: 15px 20px;
-			box-shadow: 0px 0px 15px -6px rgba(0, 0, 0, 0.4);
-			border-radius: 10px;
+
+			ion-item-sliding {
+				margin: 10px 0;
+				// --padding-top: 15px;
+				// --padding-bottom: 15px;
+				// --padding-start: 20px;
+				// --padding-end: 20px;
+				box-shadow: 0px 0px 15px -6px rgba(0, 0, 0, 0.4);
+				border-radius: 10px;
+
+				ion-item {
+					--padding-top: 4px;
+					--padding-bottom: 4px;
+					color: gray;
+
+					p {
+						margin: 0;
+						font-size: 16px;
+						font-weight: 500;
+					}
 			
-			p {
-				margin: 0;
-				font-size: 16px;
-				font-weight: 500;
-			}
-	
-			ion-toggle {
-				margin-left: 20px;
-				--handle-width: 20px;
-				--background-checked: var(--ion-color-success);
-				width: 45px;
-				height: 25px;
+					ion-toggle {
+						margin-left: 20px;
+						--handle-width: 20px;
+						--background-checked: var(--ion-color-success);
+						width: 45px;
+						height: 25px;
+					}
+				}
+
+				ion-item-option {
+					width: 100px;
+					font-size: 22px;
+
+					&.start {
+						width: 50px;
+					}
+
+					ion-reorder {
+						height: 20px;
+
+						ion-icon {
+							width: 100px;
+						}
+					}
+				}
 			}
 		}
 	}
