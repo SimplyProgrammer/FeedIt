@@ -26,7 +26,7 @@
 				</div>
 			</ion-card-header>
 
-			<ion-button expand="block" class="mb-3" color="tertiary" @click.self="feed()">Spustit teraz</ion-button>
+			<ion-button expand="block" class="mb-3" color="tertiary" @click.self="feed()" :disabled="isFeeding">{{isFeeding ? "Davkovanie prebieha..." : "Spustit teraz"}}</ion-button>
 
 			<ion-list lines="none">
 				<ion-list-header class="mb-2">
@@ -47,7 +47,7 @@
 						</ion-item>
 
 						<ion-item-options side="start">
-							<ion-item-option color="secondary" class="start">
+							<ion-item-option v-if="plans.length > 1" color="secondary" class="start">
 								<ion-reorder>
 									<ion-icon :icon="icons.list"></ion-icon>
 								</ion-reorder>
@@ -67,7 +67,8 @@
 </template>
 
 <script>
-import AddPlanModal from '@/components/add-plan-modal.vue'
+import AddPlanModal from '@/components/add-plan-modal.vue';
+import Axios from "axios";
 
 export default {
 	props: {
@@ -85,6 +86,12 @@ export default {
 
 		plans: {
 			type:Array
+		}
+	},
+
+	data() {
+		return {
+			isFeeding: false
 		}
 	},
 
@@ -133,8 +140,23 @@ export default {
 			ev.detail.complete();
 		},
 
-		feed() {
-			console.log("Sending feeding request...");
+		urlifiedIp() {
+			return /^https?:\/\//i.test(this.ip) ? this.ip : "http://" + this.ip;
+		},
+
+		async feed() {
+			this.isFeeding = true;
+			const reply = await Axios.get(this.urlifiedIp() + "/feednow", {timeout: 3000}).catch(err => null);
+			this.isFeeding = false;
+
+			const toast = await this.toastController.create({
+				color: reply ? "success" : "danger",
+				message: reply ? "Davkovanie prebehlo uspesne!" : "Davkovanie zlyhalo!",
+				duration: 2500
+			});
+			toast.present();
+			
+			return reply; //return in case of further Promise action is required 
 		}
 	},
 }

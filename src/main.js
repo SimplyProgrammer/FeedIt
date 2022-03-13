@@ -29,7 +29,7 @@ SwiperCore.use([Pagination, Scrollbar]); //declare two plugins
 
 import '@vaadin/vaadin';
 
-import { modalController } from "@ionic/vue"; //modalController...
+import { modalController, toastController } from "@ionic/vue"; //modalController, toastController...
 
 const app = createApp(App).use(IonicVue).use(router);
 
@@ -55,7 +55,8 @@ app.mixin({
 				}
 			}),
 
-			modalController: modalController
+			modalController: modalController,
+			toastController: toastController
 		}
 	},
 });

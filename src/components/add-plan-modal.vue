@@ -20,7 +20,6 @@
 <script>
 import Selection from '@/components/selection.vue';
 import Modal from '@/components/Modal.vue';
-import { toastController } from '@ionic/vue';
 
 export default {
 
@@ -67,7 +66,7 @@ export default {
 
 			if (message)
 			{
-				const toast = await toastController.create({
+				const toast = await this.toastController.create({
 					color: "danger",
 					message: message,
 					duration: 2500
