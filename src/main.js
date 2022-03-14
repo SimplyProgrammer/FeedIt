@@ -31,6 +31,9 @@ import '@vaadin/vaadin';
 
 import { modalController, toastController } from "@ionic/vue"; //modalController, toastController...
 
+import Axios from 'axios';
+Axios.defaults.timeout = 3000;
+
 const app = createApp(App).use(IonicVue).use(router);
 
 app.mixin({

@@ -146,7 +146,7 @@ export default {
 
 		async feed() {
 			this.isFeeding = true;
-			const reply = await Axios.get(this.urlifiedIp() + "/feednow", {timeout: 3000}).catch(err => null);
+			const reply = await Axios.get(this.urlifiedIp() + "/feednow").catch(err => null);
 			this.isFeeding = false;
 
 			const toast = await this.toastController.create({
