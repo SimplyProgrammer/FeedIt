@@ -46,7 +46,15 @@
 					width: 20px;
 					height: 20px;
 					border-radius: 50%;
-					background: var(--ion-color-success);
+					transition: all 0.4s;
+
+					&.online {
+						background: var(--ion-color-success);
+					}
+
+					&.offline {
+						background: gray;
+					}
 				}
 			}
 		}

@@ -33,6 +33,8 @@ import { modalController, toastController } from "@ionic/vue"; //modalController
 
 import Axios from 'axios';
 Axios.defaults.timeout = 3000;
+Axios.defaults.headers.common['Access-Control-Allow-Origin'] = '*';
+Axios.defaults.headers.common['Access-Control-Allow-Methods'] = 'GET,PUT,POST,DELETE,PATCH,OPTIONS';
 
 const app = createApp(App).use(IonicVue).use(router);
 

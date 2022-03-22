@@ -21,7 +21,8 @@
 					<h1>{{name}}</h1>
 					<div class="w-fit d-flex ion-align-items-center margin-auto">
 						<p>Status:</p>
-						<div class="indicator"></div>
+						<div v-if="status == 0" class="indicator online"></div>
+						<div v-else class="indicator offline"></div>
 					</div>
 				</div>
 			</ion-card-header>
@@ -91,8 +92,21 @@ export default {
 
 	data() {
 		return {
-			isFeeding: false
+			isFeeding: false,
+			status: 0
 		}
+	},
+
+	mounted() {
+		// Keep alive loop for status update
+		// setTimeout(async function() {
+		// 	const reply = await Axios.get("http://crossorigin.me").catch(() => null);
+		// 	if (reply)
+		// 		this.status = 0;
+		// 	else
+		// 		this.status = 1;
+		// 	console.log("keep alive");
+		// }, 2000); 
 	},
 
 	watch: {
@@ -146,15 +160,18 @@ export default {
 
 		async feed() {
 			this.isFeeding = true;
-			const reply = await Axios.get(this.urlifiedIp() + "/feednow").catch(err => null);
-			this.isFeeding = false;
+			const reply = await Axios.get(this.urlifiedIp() + "/start/?now").catch(error => {
+                //const msg = error.message.toString();
+                return {errMessage: "Davkovanie zlyhalo! " /*+ msg.charAt(0).toUpperCase() + msg.slice(1)*/};
+            });
+            this.isFeeding = false;
 
-			const toast = await this.toastController.create({
-				color: reply ? "success" : "danger",
-				message: reply ? "Davkovanie prebehlo uspesne!" : "Davkovanie zlyhalo!",
-				duration: 2500
-			});
-			toast.present();
+            const toast = await this.toastController.create({
+                color: reply.errMessage ? "danger" : "success",
+                message: reply.errMessage ?? "Davkovanie prebehlo uspesne!",
+                duration: 2500
+            });
+            toast.present();
 			
 			return reply; //return in case of further Promise action is required 
 		}
