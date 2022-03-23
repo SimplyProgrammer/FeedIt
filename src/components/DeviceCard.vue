@@ -107,7 +107,7 @@ export default {
 		},
 
 		ip: function() {
-			this.updateStatus();
+			this.updateStatus(1000);
 		},
 
 		status: function() {
@@ -164,9 +164,9 @@ export default {
 			return /^https?:\/\//i.test(this.ip) ? this.ip : "http://" + this.ip;
 		},
 
-		async updateStatus() {
-			const reply = await Axios.get(this.urlifiedIp() + "/", {timeout: this.status ? 10000 : 1000}).then(resp => {
-				this.status = resp.data == "FUNGUJ !" ? 0 : "Adresa " + this.ip + " nieje kromitko CodeX Pet Feeder!";
+		async updateStatus(timeout = this.status ? 12000 : 1000) {
+			const reply = await Axios.get(this.urlifiedIp() + "/", {timeout: timeout}).then(resp => {
+				this.status = resp.data == "CodeX Pet Feeder zariadenie root!" ? 0 : "Adresa " + this.ip + " nieje kromitko CodeX Pet Feeder!";
 			}).catch(error => {
 				if (!error.response || error.code == 'ECONNABORTED')
 					this.status = 1;
@@ -218,7 +218,7 @@ export default {
 
 			this.isFeeding = true;
 			const reply = await Axios.get(this.urlifiedIp() + "/start/?now").catch(error => {
-				if (error.code == 'ECONNABORTED')
+				if (!error.response || error.code == 'ECONNABORTED')
 				{
 					this.status = 1;
 					return {errMessage: "Zariadenie je offline! Davkovanie zlyhalo!" /*+ msg.charAt(0).toUpperCase() + msg.slice(1)*/};
@@ -229,7 +229,7 @@ export default {
 
 			const toast = await this.toastController.create({
 				color: reply.errMessage ? "danger" : "success",
-				message: reply.errMessage ?? "Davkovanie prebehlo!",
+				message: reply.errMessage ?? "Davkovanie spustene!",
 				duration: 2500
 			});
 			toast.present();
