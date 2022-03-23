@@ -19,10 +19,11 @@
 				<img src="@/assets/imgs/krmitko1.png" alt="">
 				<div class="description">
 					<h1>{{name}}</h1>
-					<div class="w-fit d-flex ion-align-items-center margin-auto">
+					<div class="w-fit d-flex ion-align-items-center margin-auto" @click="showStatus()">
 						<p>Status:</p>
 						<div v-if="status == 0" class="indicator online"></div>
-						<div v-else class="indicator offline"></div>
+						<div v-else-if="status == 1" class="indicator offline"></div>
+						<div v-else class="indicator error"></div>
 					</div>
 				</div>
 			</ion-card-header>
@@ -86,41 +87,47 @@ export default {
 		},
 
 		plans: {
-			type:Array
+			type: Array
 		}
 	},
 
 	data() {
 		return {
 			isFeeding: false,
-			status: 0
+			status: 1
 		}
-	},
-
-	mounted() {
-		// Keep alive loop for status update
-		// setTimeout(async function() {
-		// 	const reply = await Axios.get("http://crossorigin.me").catch(() => null);
-		// 	if (reply)
-		// 		this.status = 0;
-		// 	else
-		// 		this.status = 1;
-		// 	console.log("keep alive");
-		// }, 2000); 
 	},
 
 	watch: {
 		plans: {
-			handler: function (val, oldVal) {
-				console.log("Sending to: "+this.ip + " " + this.name);
-				console.log(val);
+			handler: function(val, oldVal) {
+				this.sendPlansToDevice();
 			},
 			deep: true
-		}
+		},
+
+		ip: function() {
+			this.updateStatus();
+		},
+
+		status: function() {
+			if (this.status == 0)
+				this.sendPlansToDevice();
+		},
 	},
 
 	methods: {
 		async openPlanModal(index = -1) {
+			if (index == -1 && this.plans.length >= 12)
+			{
+				const toast = await this.toastController.create({
+					color:  "danger",
+					message: "Privela casovych planov!",
+					duration: 2500
+				});
+				return toast.present();
+			}
+				
 			this.addPlanModal = await this.modalController.create({
 				component: AddPlanModal,
 				breakpoints: [0, 1],
@@ -144,7 +151,6 @@ export default {
 		},
 
 		removePlan(index) {
-			console.log(index);
 			this.plans.splice(index, 1);
 		},
 
@@ -158,24 +164,97 @@ export default {
 			return /^https?:\/\//i.test(this.ip) ? this.ip : "http://" + this.ip;
 		},
 
-		async feed() {
-			this.isFeeding = true;
-			const reply = await Axios.get(this.urlifiedIp() + "/start/?now").catch(error => {
-                //const msg = error.message.toString();
-                return {errMessage: "Davkovanie zlyhalo! " /*+ msg.charAt(0).toUpperCase() + msg.slice(1)*/};
-            });
-            this.isFeeding = false;
+		async updateStatus() {
+			const reply = await Axios.get(this.urlifiedIp() + "/", {timeout: this.status ? 10000 : 1000}).then(resp => {
+				this.status = resp.data == "FUNGUJ !" ? 0 : "Adresa " + this.ip + " nieje kromitko CodeX Pet Feeder!";
+			}).catch(error => {
+				if (!error.response || error.code == 'ECONNABORTED')
+					this.status = 1;
+				else
+					this.status = error.message ?? "Status 2";
+			});
+			return this.status;
+		},
 
-            const toast = await this.toastController.create({
-                color: reply.errMessage ? "danger" : "success",
-                message: reply.errMessage ?? "Davkovanie prebehlo!",
+		async showStatus() {
+			const status = this.status;
+			const toast = await this.toastController.create({
+                color: status == 0 ? "success" : "danger",
+                message: status == 0 ? "Zariadenie je online!" : status != 1 ? ("Chyba konektivity zariadenia: " + status) : "Zariadenie je offline!",
                 duration: 2500
             });
             toast.present();
+		},
+
+		async sendPlansToDevice() { // send plans data to device
+			if (this.status)
+				return;
+
+			try
+			{
+				await Axios.get(this.urlifiedIp()+"/resetAll/?now");
+				const activePlans = this.plans.filter(plan => plan.active);
+				for (var i = 0; i < activePlans.length; i++)
+				{
+					const time = activePlans[i].time.split(":");
+					const request = this.urlifiedIp()+"/plans/?set" + i + "&hours=" + time[0] + "&minute=" + time[1];
+					for (var j = 0; j < activePlans[i].days.length; j++)
+					{
+						request += "&day" + activePlans[i].days[j];
+					}
+					// console.log(request); 
+					await Axios.get(request);
+				}
+			}
+			catch (err)
+			{
+				await this.updateStatus();
+			}
+		},
+
+		async feed() { //feed now
+			if (this.status)
+				return this.showStatus();
+
+			this.isFeeding = true;
+			const reply = await Axios.get(this.urlifiedIp() + "/start/?now").catch(error => {
+				if (error.code == 'ECONNABORTED')
+				{
+					this.status = 1;
+					return {errMessage: "Zariadenie je offline! Davkovanie zlyhalo!" /*+ msg.charAt(0).toUpperCase() + msg.slice(1)*/};
+				}
+				return {errMessage: "Davkovanie zlyhalo!" /*+ msg.charAt(0).toUpperCase() + msg.slice(1)*/};
+			});
+			this.isFeeding = false;
+
+			const toast = await this.toastController.create({
+				color: reply.errMessage ? "danger" : "success",
+				message: reply.errMessage ?? "Davkovanie prebehlo!",
+				duration: 2500
+			});
+			toast.present();
 			
 			return reply; //return in case of further Promise action is required 
 		}
 	},
+
+	mounted() {
+		//Keep alive loop for status update
+		const self = this;
+		this.keepAliveLoop = async function(time) {
+			await self.updateStatus();	
+ 
+			setTimeout(() => {
+				if (self.keepAliveLoop)
+					self.keepAliveLoop(2000);
+			}, time);
+		};
+		this.keepAliveLoop();
+	},
+
+	unmounted() {
+		this.keepAliveLoop = null;
+	}
 }
 </script>
 

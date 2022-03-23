@@ -36,6 +36,12 @@ img {
 ion-icon {
 	width: 25px;
 	height: 25px;
+	border-radius: 50%;
+	transition: 0.1s;
+
+	&:active {
+		background: var(--ion-color-light);
+	}
 }
 
 ion-toolbar {

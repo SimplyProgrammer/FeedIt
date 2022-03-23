@@ -46,7 +46,7 @@
 					width: 20px;
 					height: 20px;
 					border-radius: 50%;
-					transition: all 0.4s;
+					transition: 0.5s;
 
 					&.online {
 						background: var(--ion-color-success);
@@ -54,6 +54,10 @@
 
 					&.offline {
 						background: gray;
+					}
+
+					&.error {
+						background: var(--ion-color-danger);
 					}
 				}
 			}
@@ -80,6 +84,12 @@
 
 					ion-icon {
 						margin: 0;
+						border-radius: 50%;
+						transition: 0.1s;
+
+						&:active {
+							background: var(--ion-color-light);
+						}
 					}
 				}
 			}
