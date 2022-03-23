@@ -168,7 +168,7 @@ export default {
 
             const toast = await this.toastController.create({
                 color: reply.errMessage ? "danger" : "success",
-                message: reply.errMessage ?? "Davkovanie prebehlo uspesne!",
+                message: reply.errMessage ?? "Davkovanie prebehlo!",
                 duration: 2500
             });
             toast.present();
