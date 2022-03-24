@@ -3,7 +3,7 @@
 		<div>
 			<div class="grid-item">
 				<h4>Vyberte Čas:</h4>
-				<ion-datetime class="time-picker" hour-cycle="h23" presentation="time" mode="md" :value="modalTime" @ionChange="modalTime = $event.target.value"></ion-datetime>
+				<ion-datetime class="time-picker" size="cover" hour-cycle="h23" presentation="time" mode="md" :value="modalTime" @ionChange="modalTime = $event.target.value"></ion-datetime>
 			</div>
 
 			<h4>Vyberte dni:</h4>
@@ -105,5 +105,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-
+ion-datetime {
+	width: 100%;
+}
 </style>

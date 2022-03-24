@@ -161,7 +161,7 @@ export default {
 		},
 
 		urlifiedIp() {
-			return /^https?:\/\//i.test(this.ip) ? this.ip : "http://" + this.ip;
+			return /^https?:\/\//i.test(this.ip) ? this.ip : "https://" + this.ip;
 		},
 
 		async updateStatus(timeout = this.status ? 12000 : 1000) {
