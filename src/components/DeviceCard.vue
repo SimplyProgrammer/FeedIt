@@ -164,7 +164,7 @@ export default {
 			return /^https?:\/\//i.test(this.ip) ? this.ip : "https://" + this.ip;
 		},
 
-		async updateStatus(timeout = this.status ? 12000 : 1000) {
+		async updateStatus(timeout = this.status ? 12000 : 2000) {
 			const reply = await Axios.get(this.urlifiedIp() + "/", {timeout: timeout}).then(resp => {
 				this.status = resp.data == "CodeX Pet Feeder zariadenie root!" ? 0 : "Adresa " + this.ip + " nieje kromitko CodeX Pet Feeder!";
 			}).catch(error => {
@@ -197,7 +197,7 @@ export default {
 				for (var i = 0; i < activePlans.length; i++)
 				{
 					const time = activePlans[i].time.split(":");
-					const request = this.urlifiedIp()+"/plans/?set" + i + "&hours=" + time[0] + "&minute=" + time[1];
+					const request = this.urlifiedIp()+"/plans/?set" + i + "&hour=" + time[0] + "&minute=" + time[1];
 					for (var j = 0; j < activePlans[i].days.length; j++)
 					{
 						request += "&day" + activePlans[i].days[j];
