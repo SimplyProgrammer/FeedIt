@@ -4,7 +4,7 @@
 			<!-- <img v-if="leftImg" :src="data.leftImg" slot="start" @click="$emit('profileClicked')"> -->
 			<img src="@/assets/imgs/avatar.svg" slot="start" @click="$emit('profileClicked')">
 
-			<ion-title>FeedIt</ion-title>
+			<ion-title>{{title}}</ion-title>
 			
 			<ion-icon :icon="icons.add" slot="end" @click="$emit('addClicked')"></ion-icon>
 		</ion-toolbar>
@@ -13,16 +13,12 @@
 
 <script>
 export default {
-	// props: {
-	// 	laftImg: {
-	// 		type: String,
-	// 		default: undefined
-	// 	},
-	// 	rightImg: {
-	// 		type: String,
-	// 		default: undefined
-	// 	}
-	// },
+	props: {
+		title: {
+			type: String,
+			default: ""
+		}
+	}
 }
 </script>
 

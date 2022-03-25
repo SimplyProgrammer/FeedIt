@@ -1,6 +1,6 @@
 <template>
 	<ion-page>
-		<Header @addClicked="openDeviceModal()" ref="header"/>
+		<Header title="FeedIt" @addClicked="openDeviceModal()" ref="header"/>
 		<ion-content>
 			<transition-group name="list">
 				<div v-if="deviceProfiles.length" class="wh-100">
