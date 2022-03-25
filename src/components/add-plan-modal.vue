@@ -105,7 +105,4 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-ion-datetime {
-	width: 100%;
-}
 </style>

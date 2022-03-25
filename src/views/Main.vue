@@ -1,6 +1,6 @@
 <template>
 	<ion-page>
-		<Header title="FeedIt" @addClicked="openDeviceModal()" ref="header"/>
+		<Header title="FeedIt" @addClicked="openDeviceModal()" @profileClicked="openUserDataModal()" ref="header"/>
 		<ion-content>
 			<transition-group name="list">
 				<div v-if="deviceProfiles.length" class="wh-100">
@@ -31,6 +31,7 @@
 import Header from '@/components/Header.vue';
 import DeviceCard from '@/components/DeviceCard.vue';
 import AddDeviceModal from '@/components/add-device-modal.vue';
+import UserDataModal from '@/components/user-data-modal';
 
 import { alertController } from '@ionic/vue';
 
@@ -71,7 +72,7 @@ export default {
 	watch: {
 		deviceProfiles: {
 			handler: function (val, oldVal) {
-				localStorage.setItem("appData", JSON.stringify(val));
+				localStorage.setItem("appData", JSON.stringify(val, null, "\t"));
 			},
 			deep: true
 		}
@@ -94,6 +95,20 @@ export default {
 			});
 
        		await confirm.present();
+		},
+
+		async openUserDataModal() {
+			this.userDataModal = await this.modalController.create({
+				component: UserDataModal,
+				breakpoints: [0, 1],
+				initialBreakpoint: 1,
+			});
+			this.userDataModal.present();
+
+			const { data } = await this.userDataModal.onDidDismiss();
+			if (!data) 
+				return;
+			this.deviceProfiles = data.data;
 		},
 
 		async openDeviceModal(index = -1) {

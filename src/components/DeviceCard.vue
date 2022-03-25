@@ -164,7 +164,7 @@ export default {
 			return /^https?:\/\//i.test(this.ip) ? this.ip : "https://" + this.ip;
 		},
 
-		async updateStatus(timeout = this.status ? 12000 : 2000) {
+		async updateStatus(timeout = this.status ? 12000 : 1500) {
 			const reply = await Axios.get(this.urlifiedIp() + "/", {timeout: timeout}).then(resp => {
 				this.status = resp.data == "CodeX Pet Feeder zariadenie root!" ? 0 : "Adresa " + this.ip + " nieje kromitko CodeX Pet Feeder!";
 			}).catch(error => {

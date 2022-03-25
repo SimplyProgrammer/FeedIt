@@ -4,6 +4,11 @@
 		<ion-input type="text" placeholder="Nazov..." v-model.trim="name" class="ion-padding" :class="{invalid : isNameAssigned()}" ref="nameInput"></ion-input>
 		<h4 class="mt-1">Ip adresa:</h4>
 		<ion-input type="text" placeholder="Ip adresa..." v-model.trim="ip" class="ion-padding" :class="{invalid : isIpAssigned() || !isIpValid(ip) && ip.length}"></ion-input>
+		<!-- <br> -->
+		<!-- <h4 class="mt-1">Nazov vasej siete:</h4>
+		<ion-input type="text" placeholder="Moja domaca siet..." v-model.trim="networkName" class="ion-padding"></ion-input>
+		<h4 class="mt-1">Heslo vasej siete:</h4>
+		<ion-input type="password" placeholder="Heslo domacej siete..." v-model.trim="networkPassword" class="ion-padding"></ion-input> -->
 
 		<div class="buttons-wrapper">
 			<ion-button color="secondary" @click="$refs.modal.closeModal()">Zrusit</ion-button>
@@ -31,6 +36,16 @@ export default {
 		},
 
 		ip: {
+			type: String,
+			default: ""
+		},
+
+		networkName: {
+			type: String,
+			default: ""
+		},
+
+		networkPassword: {
 			type: String,
 			default: ""
 		},

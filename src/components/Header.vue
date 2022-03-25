@@ -23,23 +23,6 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-img {
-	height: 34px;
-	width: 34px;
-	border-radius: 50%;
-}
-
-ion-icon {
-	width: 25px;
-	height: 25px;
-	border-radius: 50%;
-	transition: 0.1s;
-
-	&:active {
-		background: var(--ion-color-light);
-	}
-}
-
 ion-toolbar {
 	height: 54px !important;
 	max-height: 54px !important;
@@ -51,5 +34,27 @@ ion-toolbar {
 	--padding-bottom: 10px;
 	--border-color: transparent;
 	box-shadow: 0px 0px 15px -6px rgba(0, 0, 0, 0.3);
+
+	img {
+		height: 34px;
+		width: 34px;
+		border-radius: 50%;
+		transition: 0.1s;
+
+		&:active {
+			filter: contrast(60%);
+		}
+	}
+
+	ion-icon {
+		width: 25px;
+		height: 25px;
+		border-radius: 50%;
+		transition: 0.1s;
+
+		&:active {
+			background: var(--ion-color-light);
+		}
+	}
 }
 </style>
