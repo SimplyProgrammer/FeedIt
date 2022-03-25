@@ -5,11 +5,11 @@ import NotFound from '../views/NotFound.vue'
 
 const routes = [
 	{
-		path: '/',
-		redirect: '/feedit'
+		path: '/feedit',
+		redirect: '/'
 	},
 	{
-		path: '/feedit',
+		path: '/',
 		name: 'Main',
 		component: Main
 	},

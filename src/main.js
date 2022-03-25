@@ -31,8 +31,13 @@ import '@vaadin/vaadin';
 
 import { modalController, toastController } from "@ionic/vue"; //modalController, toastController...
 
+//Axios defaults
+import https from 'https';
 import Axios from 'axios';
 Axios.defaults.timeout = 3000;
+Axios.defaults.httpsAgent = new https.Agent({
+	rejectUnauthorized: false,
+});
 // Axios.defaults.headers.common['Access-Control-Allow-Origin'] = '*';
 // Axios.defaults.headers.common['Access-Control-Allow-Methods'] = 'GET,PUT,POST,DELETE,PATCH,OPTIONS';
 
