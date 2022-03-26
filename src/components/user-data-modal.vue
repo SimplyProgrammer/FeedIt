@@ -13,7 +13,10 @@
 
 		<div class="buttons-wrapper">
 			<ion-button color="secondary" @click="$refs.modal.closeModal()" ref="cancel">Zrušiť</ion-button>
-			<ion-button color="tertiary" @click="saveModal()" ref="save">Potvrdit</ion-button>
+			<ion-button color="tertiary" @click="saveModal()" ref="save">
+				<ion-icon v-if="confirm" :icon="icons.checkmarkSharp"></ion-icon>
+				<div v-else>Potvrdit</div> 
+			</ion-button>
 		</div>
 	</Modal>
 </template>
@@ -30,13 +33,17 @@ export default {
 	data() {
 		return {
 			data: localStorage.getItem("appData"),
-			oldData: localStorage.getItem("appData")
+			oldData: localStorage.getItem("appData"),
+			changeCount: 0,
+			confirm: 0
 		}
 	},
 
 	watch: {
 		data: function(newV, oldV) {
 			this.oldData = oldV;
+			this.changeCount++;
+			this.confirm = 0;
 		}
 	},
 
@@ -44,7 +51,14 @@ export default {
 		isValid() {
 			try {
 				if (this.data)
-					return JSON.parse(this.data);
+				{ 
+					var obj = JSON.parse(this.data);
+					obj.forEach(element => {
+						if (!element.ip || !element.name || !element.plans)
+							return obj = false;
+					});
+					return obj;
+				}
 				else
 					return [];
 			} catch (e) {
@@ -82,8 +96,11 @@ export default {
 			const data = this.isValid();
 			if (data)
 			{
+				if (this.changeCount && this.confirm++ <= 0)
+					return;
+
 				this.modalController.dismiss({
-					data: data
+					data: this.changeCount ? data : undefined
 				});
 				return;
 			}

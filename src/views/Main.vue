@@ -72,7 +72,7 @@ export default {
 	watch: {
 		deviceProfiles: {
 			handler: function (val, oldVal) {
-				localStorage.setItem("appData", JSON.stringify(val, null, "\t"));
+				localStorage.setItem("appData", JSON.stringify(val));
 			},
 			deep: true
 		}
@@ -106,8 +106,9 @@ export default {
 			this.userDataModal.present();
 
 			const { data } = await this.userDataModal.onDidDismiss();
-			if (!data) 
+			if (!data?.data)
 				return;
+
 			this.deviceProfiles = data.data;
 		},
 

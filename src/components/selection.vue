@@ -29,18 +29,18 @@ export default {
 	},
 
 	methods: {
-		toggleTagFilter(velue) {
+		toggleTagFilter(value) {
 			if (!this.multiselection)
 			{
-				this.activeValues = [velue];
+				this.activeValues = [value];
 				return;
 			}
 
-			var index = this.activeValues.indexOf(velue);
+			var index = this.activeValues.indexOf(value);
             if (index > -1)
                 this.activeValues.splice(index, 1);
             else 
-                this.activeValues.push(velue);
+                this.activeValues.push(value);
             
 			this.$emit("selected", this.activeValues);
         },
@@ -74,8 +74,8 @@ export default {
 		}
 
 		.name-wrapper {
-			width: 30px;
-			height: 30px;
+			width: 32px;
+			height: 32px;
 			display: flex;
 			justify-content: center;
 			align-items: center;

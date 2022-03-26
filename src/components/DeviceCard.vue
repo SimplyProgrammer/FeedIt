@@ -41,7 +41,7 @@
 				<transition-group name="list" tag="ion-reorder-group" class="swiper-no-swiping" @ionItemReorder="reorderPlans($event)" :disabled="false">
 					<ion-item-sliding v-for="(plan, i) in plans" :key="plan">
 						<ion-item @click.self="openPlanModal(i)">
-							<p slot="start">{{plan.formatedDays}}</p>
+							<p slot="start" @click="openPlanModal(i)">{{formatSelection(selectableDays, plan.days)}}</p>
 							<div slot="end" class="d-flex ion-align-items-center">
 								<p>{{plan.time}}</p>
 								<ion-toggle v-model="plan.active"></ion-toggle>
@@ -93,6 +93,15 @@ export default {
 
 	data() {
 		return {
+			selectableDays: [
+				"Pondelok",
+				"Utorok",
+				"Streda",
+				"Štvrtok",
+				"Piatok",
+				"Sobota", 
+				"Nedela"
+			],
 			isFeeding: false,
 			status: 1
 		}
@@ -133,8 +142,9 @@ export default {
 				breakpoints: [0, 1],
 				initialBreakpoint: 1,
 				componentProps: {
-					time: index == -1 ? "08:30" : this.plans[index].time,
-					selectedDays: [...index == -1 ? (this.plans[this.plans.length-1]?.days ?? []) : this.plans[index].days],
+					selectableDays: this.selectableDays,
+					time: index == -1 || !/^\d\d\:\d\d$/.test(this.plans[index].time) ? "08:30" : this.plans[index].time,
+					selectedDays: [...(index == -1 ? this.plans[this.plans.length-1]?.days : this.plans[index]?.days) ?? []],
 				}
 			});
 			this.addPlanModal.present();
@@ -143,11 +153,38 @@ export default {
 			if (!data) 
 				return;
 
-			data.active = true;
 			if (index == -1)
+			{
+				data.active = true;
 				this.plans.push(data);
+			}
 			else
-				this.plans[index] = data;
+			{
+				this.plans[index].days = data.days;
+				this.plans[index].time = data.time;
+			}
+		},
+
+		formatSelection(array, selectedIndexes) { // used for formating selected days into string
+			selectedIndexes = [...new Set(selectedIndexes)];
+			if (selectedIndexes.length == 1) 
+				return array[selectedIndexes[0]];
+
+			let isOrdered = true;
+			for (var i = 0, oldValue = selectedIndexes[i] - 1; i < selectedIndexes.length; i++)
+			{	
+				if (oldValue + 1 != selectedIndexes[i])
+				{
+					isOrdered = false;
+					break;
+				}
+				oldValue = selectedIndexes[i];
+			}
+
+			const days = selectedIndexes.map(daysIndex => array[daysIndex]?.substring(0, 2));
+			if (isOrdered) 
+				return days[0] + " - " + days.slice(-1);
+			return days.join(", ");
 		},
 
 		removePlan(index) {

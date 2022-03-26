@@ -7,7 +7,7 @@
 			</div>
 
 			<h4>Vyberte dni:</h4>
-			<Selection :values="days.map(day => day.substring(0, 1))" ref="selection"/>
+			<Selection :values="selectableDays.map(day => day.substring(0, 1))" ref="selection"/>
 		</div>
 
 		<div class="buttons-wrapper">
@@ -29,27 +29,19 @@ export default {
 	},
 
 	props: {
+		selectableDays: {
+			type: Array,
+			default: []
+		},
+
 		time: {
 			type: String,
 			default: "08:30"
 		},
+
 		selectedDays: {
 			type: Array,
 			default: []
-		},
-	},
-
-	data() {
-		return {
-			days: [
-				"Pondelok",
-				"Utorok",
-				"Streda",
-				"Štvrtok",
-				"Piatok",
-				"Sobota", 
-				"Nedela"
-			],
 		}
 	},
 
@@ -60,7 +52,7 @@ export default {
 
 	methods: {
 		async saveModal() {
-			const days = this.$refs.selection.selectedValues;
+			var days = this.$refs.selection.selectedValues;
 
 			var message = days.length <= 0 ? "Prosim vyberte aspon 1 den!" : undefined;
 
@@ -76,29 +68,8 @@ export default {
 
 			this.modalController.dismiss({
 				days: days,
-				formatedDays: this.formatSelection(days),
 				time: this.modalTime,
 			});
-		},
-
-		formatSelection(selectedIndexes) {
-			if (selectedIndexes.length == 1) {
-				return this.days[selectedIndexes[0]];
-			}
-
-			let isOrdered = true;
-			selectedIndexes.forEach((day, index) => {
-				if (selectedIndexes[index + 1] && day + 1 != selectedIndexes[index + 1]) {
-					isOrdered = false;
-					return false;
-				}
-			})
-
-			const days = selectedIndexes.map(daysIndex => this.days[daysIndex].substring(0, 2));
-			if (isOrdered) {
-				return days[0] + " - " + days.slice(-1);
-			}
-			return days.join(", ");
 		}
 	},
 };
