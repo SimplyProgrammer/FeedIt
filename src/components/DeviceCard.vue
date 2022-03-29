@@ -28,7 +28,7 @@
 				</div>
 			</ion-card-header>
 
-			<ion-button expand="block" class="mb-3" color="tertiary" @click.self="feed()" :disabled="isFeeding">{{isFeeding ? "Davkovanie prebieha..." : "Spustit teraz"}}</ion-button>
+			<ion-button expand="block" class="mb-3" color="tertiary" @click.self="feed()" :disabled="isFeeding">{{isFeeding ? "Dávkovanie prebieha..." : "Spustiť teraz"}}</ion-button>
 
 			<ion-list lines="none">
 				<ion-list-header class="mb-2">
@@ -129,7 +129,7 @@ export default {
 		async openPlanModal(index = -1) {
 			if (index == -1 && this.plans.length >= 12)
 			{
-				return await this.toast("Privela casovych planov!", "danger");
+				return await this.toast("Priveľa časových plánov!", "danger");
 			}
 				
 			this.addPlanModal = await this.modal(AddPlanModal, {
@@ -245,13 +245,13 @@ export default {
 				if (!error.response || error.code == 'ECONNABORTED')
 				{
 					this.status = 1;
-					return {errMessage: "Zariadenie je offline! Davkovanie zlyhalo!" /*+ msg.charAt(0).toUpperCase() + msg.slice(1)*/};
+					return {errMessage: "Zariadenie je offline! Dávkovanie zlyhalo!" /*+ msg.charAt(0).toUpperCase() + msg.slice(1)*/};
 				}
-				return {errMessage: "Davkovanie zlyhalo!" /*+ msg.charAt(0).toUpperCase() + msg.slice(1)*/};
+				return {errMessage: "Dávkovanie zlyhalo!" /*+ msg.charAt(0).toUpperCase() + msg.slice(1)*/};
 			});
 			this.isFeeding = false;
 
-			await this.toast(reply.errMessage ?? "Davkovanie spustene!", reply.errMessage ? "danger" : "success");
+			await this.toast(reply.errMessage ?? "Dávkovanie spustené!", reply.errMessage ? "danger" : "success");
 			
 			return reply; //return in case of further Promise action is required 
 		}

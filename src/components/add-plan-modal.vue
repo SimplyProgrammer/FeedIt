@@ -2,7 +2,7 @@
 	<Modal title="Casový plán" ref="modal">
 		<div>
 			<div class="grid-item">
-				<h4>Vyberte Čas:</h4>
+				<h4>Vyberte čas:</h4>
 				<ion-datetime class="time-picker" size="cover" hour-cycle="h23" presentation="time" mode="md" :value="modalTime" @ionChange="modalTime = $event.target.value"></ion-datetime>
 			</div>
 
@@ -12,7 +12,7 @@
 
 		<div class="buttons-wrapper">
 			<ion-button color="secondary" @click="$refs.modal.closeModal()" ref="cancel">Zrušiť</ion-button>
-			<ion-button color="tertiary" @click="saveModal()" ref="save">Potvrdit</ion-button>
+			<ion-button color="tertiary" @click="saveModal()" ref="save">Potvrdiť</ion-button>
 		</div>
 	</Modal>
 </template>
@@ -54,7 +54,7 @@ export default {
 		async saveModal() {
 			var days = this.$refs.selection.selectedValues;
 
-			var message = days.length <= 0 ? "Prosim vyberte aspon 1 den!" : undefined;
+			var message = days.length <= 0 ? "Prosím vyberte aspoň 1 deň!" : undefined;
 
 			if (message)
 			{

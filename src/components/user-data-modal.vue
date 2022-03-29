@@ -1,28 +1,28 @@
 <template>
-	<Modal title="Uzivatelske data" ref="modal">
-		<h4>Udaje o vasej sieti</h4>
-		<p>Aplikacia potrebujeudaje udaje o vasej sieti aby vedel komunikovat so zariadeniami! Pametajte ze vase mobilne zariadenie musi byt na rovnakej sieti ako zariadenie!</p>
-		<h6 class="mt-1">Nazov vasej siete:</h6>
+	<Modal title="Užívateľské dáta" ref="modal">
+		<h4>Údaje o vašej sieti</h4>
+		<p>Aplikácia potrebujeudaje údaje o vašej sieti aby vedel komunikovať so zariadeniami! Pametajte že vaše mobilné zariadenie musí byť na rovnakej sieti ako zariadenie!</p>
+		<h6 class="mt-1">Názov vašej siete:</h6>
 		<ion-input type="text" placeholder="Moja domaca siet..." v-model.trim="networkName" class="ion-padding"></ion-input>
-		<h6 class="mt-1">Heslo vasej siete:</h6>
+		<h6 class="mt-1">Heslo vašej siete:</h6>
 		<ion-input type="password" placeholder="Heslo domacej siete..." v-model.trim="networkPassword" class="ion-padding"></ion-input>
 
-		<h4 class="mt-5">Vase data</h4>
-		<p>Skopirujte, preneste a vlozte tento text do ineho mobilneho zariadenia pre synchronizaciu vasich dat o zariadeniach!</p>
+		<h4 class="mt-5">Vaše dáta</h4>
+		<p>Skopírujte, preneste a vložte tento text do iného mobilného zariadenia pre synchronizáciu vašich dát o zariadeniach!</p>
 		<textarea class="width-100" v-model.trim="data" :class="{invalid : !isValid()}"></textarea>
 		<div class="d-flex">
 			<ion-button color="light" class="small" @click="back()">
 				<ion-icon :icon="icons.arrow"></ion-icon>
 			</ion-button>
-			<ion-button color="light" @click="paste()">Vlozit</ion-button>
-			<ion-button color="light" @click="copy()">Kopirovat</ion-button>
+			<ion-button color="light" @click="paste()">Vložiť</ion-button>
+			<ion-button color="light" @click="copy()">Kopírovať</ion-button>
 		</div>
 
 		<div class="buttons-wrapper">
 			<ion-button color="secondary" @click="$refs.modal.closeModal()" ref="cancel">Zrušiť</ion-button>
 			<ion-button color="tertiary" @click="saveModal()" ref="save">
 				<ion-icon v-if="confirm" :icon="icons.checkmarkSharp"></ion-icon>
-				<div v-else>Potvrdit</div> 
+				<div v-else>Potvrdiť</div> 
 			</ion-button>
 		</div>
 	</Modal>
@@ -87,13 +87,13 @@ export default {
 		async paste() {
 			this.data = await navigator.clipboard.readText();
 
-			return await this.toast("Text vlozeny!");
+			return await this.toast("Text vložený!");
 		},
 
 		async copy() {
 			navigator.clipboard.writeText(this.data);
 
-			return await this.toast("Text skopirovany!");
+			return await this.toast("Text skopírovaný!");
 		},
 
 		back() {
@@ -119,7 +119,7 @@ export default {
 				});
 			}
 
-			return await this.toast("Zadane data su chybne!", "danger");
+			return await this.toast("Zadané dáta sú chybné!", "danger");
 		},
 	}
 };

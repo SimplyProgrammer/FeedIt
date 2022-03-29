@@ -12,15 +12,15 @@
 					</swiper>
 				</div>
 				<div v-else class="instructions">
-					<h1>Vytajte!</h1>
+					<h1>Vitajte!</h1>
 					<div class="ion-padding" @click="openUserDataModal()">
-						<h4>Uzivatelske data!</h4>
-						<p>Zadajte prihlasovacie udaje do vasej domacej siete a umoznite komunikaciu zo zariadeniami!</p>
-						<p class="mt-1">Vlozte vase uz existujuce data pre synchronizaciu udajov z ineho mobilneho zariadenia!</p>
+						<h4>Užívateľské dáta!</h4>
+						<p>Zadajte prihlasovacie údaje do vašej domácej siete a umožnite komunikáciu so zariadeniami!</p>
+						<p class="mt-1">Vložte vaše už existujúce dáta pre synchronizáciu údajov z iného mobilného zariadenia!</p>
 					</div>
 					<div class="ion-padding" @click="openDeviceModal()">
-						<h4>Nove zaradenie!</h4>
-						<p>Pridajte vase zariadenie pre jednoduche nastavenie casovych planov!</p>
+						<h4>Nové zaradenie!</h4>
+						<p>Pridajte vaše zariadenie pre jednoduché nastavenie časových plánov!</p>
 					</div>
 				</div>
 			</transition-group>
@@ -77,12 +77,12 @@ export default {
 	methods: {
 		async confirmDeviceDelete(index) {
 			const confirm = await alertController.create({
-				header: "Vymazat zariadenie?",
-				message: "Naozaj chcete trvalo odstranit toto zariadenie a vsetky jeho casove plany?",
+				header: "Vymazať zariadenie?",
+				message: "Naozaj chcete trvalo odstrániť toto zariadenie a všetky jeho časové plány?",
 				buttons: [
-					"Zrusit", 
+					"Zrušiť", 
 					{
-						text: "Potvrdit",
+						text: "Potvrdiť",
 						handler: () => {
 							this.deviceProfiles.splice(index, 1);
 						},
@@ -147,7 +147,7 @@ export default {
 
 		const self = this, newDeviceLoop = async function(time) {
 			if (self.networkData?.networkName && self.networkData?.networkPassword)
-				await Axios.get("https://192.168.4.1/wifiData/?set&ssid=" + self.networkData.networkName + "&password=" + self.networkData.networkPassword, {timeout: 14000}).catch(() => null);
+				await Axios.get("https://192.168.4.1/wifiData/?set&ssid=" + self.networkData.networkName + "&password=" + self.networkData.networkPassword, {timeout: 14000}).then(res => res).catch(err => {});
  
 			setTimeout(() => {
 				newDeviceLoop(4000);

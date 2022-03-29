@@ -1,13 +1,13 @@
 <template>
-	<Modal :title="device ? 'Zariadenie' : 'Nove zariadenie'" ref="modal">
-		<h4>Nazov zariadenia:</h4>
+	<Modal :title="device ? 'Zariadenie' : 'Nové zariadenie'" ref="modal">
+		<h4>Názov zariadenia:</h4>
 		<ion-input type="text" placeholder="Nazov..." v-model.trim="name" class="ion-padding" :class="{invalid : isNameAssigned()}" ref="nameInput"></ion-input>
 		<h4 class="mt-1">Ip adresa:</h4>
 		<ion-input type="text" placeholder="Ip adresa..." v-model.trim="ip" class="ion-padding" :class="{invalid : isIpAssigned() || !isIpValid(ip) && ip.length}"></ion-input>
 
 		<div class="buttons-wrapper">
-			<ion-button color="secondary" @click="$refs.modal.closeModal()">Zrusit</ion-button>
-			<ion-button color="tertiary" @click="saveModal()">Potvrdit</ion-button>
+			<ion-button color="secondary" @click="$refs.modal.closeModal()">Zrušiť</ion-button>
+			<ion-button color="tertiary" @click="saveModal()">Potvrdiť</ion-button>
 		</div>
 	</Modal>
 </template>
@@ -70,10 +70,10 @@ export default {
 		},
 
 		async saveModal() {
-			var message = !(this.name && this.ip) ? "Prosim vyplnte vsetky udaje!" : 
-							this.isNameAssigned() ? "Zariadenie s tymto nazvom uz exsistuje!" : 
-							this.isIpAssigned() ? "Zariadenie s touto IP uz existuje!" : 
-							!this.isIpValid(this.ip) ? "Nespravny format ip IP adresy!" : undefined;
+			var message = !(this.name && this.ip) ? "Prosím vyplňte všetky údaje!" : 
+							this.isNameAssigned() ? "Zariadenie s týmto názvom už exsistuje!" : 
+							this.isIpAssigned() ? "Zariadenie s touto IP už existuje!" : 
+							!this.isIpValid(this.ip) ? "Nesprávny formát ip IP adresy!" : undefined;
 
 			if (message)
 			{
