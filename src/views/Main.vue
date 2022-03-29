@@ -13,13 +13,14 @@
 				</div>
 				<div v-else class="instructions">
 					<h1>Vytajte!</h1>
+					<div class="ion-padding" @click="openUserDataModal()">
+						<h4>Uzivatelske data!</h4>
+						<p>Zadajte prihlasovacie udaje do vasej domacej siete a umoznite komunikaciu zo zariadeniami!</p>
+						<p class="mt-1">Vlozte vase uz existujuce data pre synchronizaciu udajov z ineho mobilneho zariadenia!</p>
+					</div>
 					<div class="ion-padding" @click="openDeviceModal()">
 						<h4>Nove zaradenie!</h4>
 						<p>Pridajte vase zariadenie pre jednoduche nastavenie casovych planov!</p>
-					</div>
-					<div class="ion-padding">
-						<h4>Uzivatelsky ucet!</h4>
-						<p>Prihlaste sa alebo vytvorte vas uzivatelsky ucet pre synchronizaciu vasich dat na vsetkych vasich zariadeniach!</p>
 					</div>
 				</div>
 			</transition-group>
@@ -34,6 +35,7 @@ import AddDeviceModal from '@/components/add-device-modal.vue';
 import UserDataModal from '@/components/user-data-modal';
 
 import { alertController } from '@ionic/vue';
+import Axios from "axios";
 
 export default {
 	components: {
@@ -63,12 +65,6 @@ export default {
 		}
 	},
 
-	created() {
-		var appData = JSON.parse(localStorage.getItem("appData"));
-		if (appData)
-			this.deviceProfiles = appData;
-	},
-
 	watch: {
 		deviceProfiles: {
 			handler: function (val, oldVal) {
@@ -94,37 +90,28 @@ export default {
 				],
 			});
 
-       		await confirm.present();
+			await confirm.present();
 		},
 
 		async openUserDataModal() {
-			this.userDataModal = await this.modalController.create({
-				component: UserDataModal,
-				breakpoints: [0, 1],
-				initialBreakpoint: 1,
-			});
-			this.userDataModal.present();
+			this.userDataModal = await this.modal(UserDataModal);
 
 			const { data } = await this.userDataModal.onDidDismiss();
-			if (!data?.data)
+			if (!data)
 				return;
 
-			this.deviceProfiles = data.data;
+			this.networkData = data.networkData;
+			if (data.data)
+				this.deviceProfiles = data.data;
 		},
 
 		async openDeviceModal(index = -1) {
-			this.addDeviceModal = await this.modalController.create({
-				component: AddDeviceModal,
-				breakpoints: [0, 1],
-				initialBreakpoint: 1,
-				componentProps: {
-					device: index == -1 ? undefined : this.deviceProfiles[index],
-					name: index == -1 ? "" : this.deviceProfiles[index].name,
-					ip: index == -1 ? "" : this.deviceProfiles[index].ip,
-					deviceProfiles: this.deviceProfiles
-				}
+			this.addDeviceModal = await this.modal(AddDeviceModal, {
+				device: index == -1 ? undefined : this.deviceProfiles[index],
+				name: index == -1 ? "" : this.deviceProfiles[index].name,
+				ip: index == -1 ? "" : this.deviceProfiles[index].ip,
+				deviceProfiles: this.deviceProfiles
 			});
-			this.addDeviceModal.present();
 
 			const { data } = await this.addDeviceModal.onDidDismiss();
 			if (!data) 
@@ -147,6 +134,26 @@ export default {
 				this.deviceProfiles[index].ip = data.ip;
 			}
 		}
+	},
+
+	created() {
+		var appData = JSON.parse(localStorage.getItem("appData"));
+		if (appData)
+			this.deviceProfiles = appData;
+
+		var networkData = JSON.parse(localStorage.getItem("networkData"));
+		if (networkData)
+			this.networkData = networkData;
+
+		const self = this, newDeviceLoop = async function(time) {
+			if (self.networkData?.networkName && self.networkData?.networkPassword)
+				await Axios.get("https://192.168.4.1/wifiData/?set&ssid=" + self.networkData.networkName + "&password=" + self.networkData.networkPassword, {timeout: 14000}).catch(() => null);
+ 
+			setTimeout(() => {
+				newDeviceLoop(4000);
+			}, time);
+		};;
+		newDeviceLoop();
 	},
 }
 </script>

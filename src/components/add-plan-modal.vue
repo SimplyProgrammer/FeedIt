@@ -58,12 +58,7 @@ export default {
 
 			if (message)
 			{
-				const toast = await this.toastController.create({
-					color: "danger",
-					message: message,
-					duration: 2500
-				});
-				return toast.present();
+				return await this.toast(message, "danger");
 			}
 
 			this.modalController.dismiss({

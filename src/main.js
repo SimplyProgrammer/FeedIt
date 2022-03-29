@@ -43,9 +43,32 @@ Axios.defaults.httpsAgent = new https.Agent({
 
 const app = createApp(App).use(IonicVue).use(router);
 
+// Global utility
 app.mixin({
+	methods: {
+		async modal(modalComponent, componentProps = {}) {
+			const modal = await this.modalController.create({
+				component: modalComponent,
+				breakpoints: [0, 1],
+				initialBreakpoint: 1,
+				componentProps: componentProps
+			});
+			modal.present();
+			return modal;
+		},
+
+		async toast(message, color = "success", duration = 2500) {
+			const toast = await this.toastController.create({
+				color: color,
+				message: message,
+				duration: duration
+			});
+			toast.present();
+			return toast;
+		}
+	},
+
 	data() {
-		// Global utility
 		return {
 			//Utlity pre icony, nemusim zvlast importovat jak blb kazdu ikonu proste napisem napr :icon="icons.add"
 			icons: new Proxy(Object.keys(AllIcons).reduce((map, elem) => {
@@ -57,7 +80,7 @@ app.mixin({
 					if (icon)
 						return icon;
 
-					for(var key in target)
+					for (var key in target)
 					{
 						if (key.indexOf(name) > -1)
 							return target[key];

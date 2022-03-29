@@ -1,7 +1,14 @@
 <template>
 	<Modal title="Uzivatelske data" ref="modal">
-		<h4>Vase data</h4>
-		<p>Skopirujte, preneste a vlozte tento text do ineho mobilneho zariadenia pre synchronizaciu vasich dat!</p>
+		<h4>Udaje o vasej sieti</h4>
+		<p>Aplikacia potrebujeudaje udaje o vasej sieti aby vedel komunikovat so zariadeniami! Pametajte ze vase mobilne zariadenie musi byt na rovnakej sieti ako zariadenie!</p>
+		<h6 class="mt-1">Nazov vasej siete:</h6>
+		<ion-input type="text" placeholder="Moja domaca siet..." v-model.trim="networkName" class="ion-padding"></ion-input>
+		<h6 class="mt-1">Heslo vasej siete:</h6>
+		<ion-input type="password" placeholder="Heslo domacej siete..." v-model.trim="networkPassword" class="ion-padding"></ion-input>
+
+		<h4 class="mt-5">Vase data</h4>
+		<p>Skopirujte, preneste a vlozte tento text do ineho mobilneho zariadenia pre synchronizaciu vasich dat o zariadeniach!</p>
 		<textarea class="width-100" v-model.trim="data" :class="{invalid : !isValid()}"></textarea>
 		<div class="d-flex">
 			<ion-button color="light" class="small" @click="back()">
@@ -34,8 +41,19 @@ export default {
 		return {
 			data: localStorage.getItem("appData"),
 			oldData: localStorage.getItem("appData"),
+			networkName: "",
+			networkPassword: "",
 			changeCount: 0,
 			confirm: 0
+		}
+	},
+
+	mounted() {
+		var networkData = JSON.parse(localStorage.getItem("networkData"));
+		if (networkData)
+		{
+			this.networkName = networkData.networkName;
+			this.networkPassword = networkData.networkPassword;
 		}
 	},
 
@@ -69,23 +87,13 @@ export default {
 		async paste() {
 			this.data = await navigator.clipboard.readText();
 
-			const toast = await this.toastController.create({
-				color: "success",
-				message: "Text vlozeny!",
-				duration: 2500
-			});
-			return toast.present();
+			return await this.toast("Text vlozeny!");
 		},
 
 		async copy() {
 			navigator.clipboard.writeText(this.data);
 
-			const toast = await this.toastController.create({
-				color: "success",
-				message: "Text skopirovany!",
-				duration: 2500
-			});
-			return toast.present();
+			return await this.toast("Text skopirovany!");
 		},
 
 		back() {
@@ -99,18 +107,19 @@ export default {
 				if (this.changeCount && this.confirm++ <= 0)
 					return;
 
-				this.modalController.dismiss({
-					data: this.changeCount ? data : undefined
+				const networkData = {
+					networkName: this.networkName,
+					networkPassword: this.networkPassword
+				};
+
+				localStorage.setItem("networkData", JSON.stringify(networkData));
+				return this.modalController.dismiss({
+					data: this.changeCount ? data : undefined,
+					networkData: networkData
 				});
-				return;
 			}
 
-			const toast = await this.toastController.create({
-				color: "danger",
-				message: "Zadane data su chybne!",
-				duration: 2500
-			});
-			return toast.present();
+			return await this.toast("Zadane data su chybne!", "danger");
 		},
 	}
 };
@@ -122,12 +131,16 @@ p {
 	margin-top: 8px;
 }
 
-h4 {
+h4, h6 {
 	margin: 0;
 }
 
+h6 {
+	font-size: 15.5px;
+}
+
 textarea {
-	height: 300px;
+	height: 220px;
 	border: 2px solid gray;
 	--padding-start: 10px;
 	transition: 0.2s;

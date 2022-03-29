@@ -116,7 +116,7 @@ export default {
 		},
 
 		ip: function() {
-			this.updateStatus(1000);
+			this.updateStatus(1500);
 		},
 
 		status: function() {
@@ -129,25 +129,14 @@ export default {
 		async openPlanModal(index = -1) {
 			if (index == -1 && this.plans.length >= 12)
 			{
-				const toast = await this.toastController.create({
-					color:  "danger",
-					message: "Privela casovych planov!",
-					duration: 2500
-				});
-				return toast.present();
+				return await this.toast("Privela casovych planov!", "danger");
 			}
 				
-			this.addPlanModal = await this.modalController.create({
-				component: AddPlanModal,
-				breakpoints: [0, 1],
-				initialBreakpoint: 1,
-				componentProps: {
-					selectableDays: this.selectableDays,
-					time: index == -1 || !/^\d\d\:\d\d$/.test(this.plans[index].time) ? "08:30" : this.plans[index].time,
-					selectedDays: [...(index == -1 ? this.plans[this.plans.length-1]?.days : this.plans[index]?.days) ?? []],
-				}
+			this.addPlanModal = await this.modal(AddPlanModal, {
+				selectableDays: this.selectableDays,
+				time: index == -1 || !/^\d\d\:\d\d$/.test(this.plans[index].time) ? "08:30" : this.plans[index].time,
+				selectedDays: [...(index == -1 ? this.plans[this.plans.length-1]?.days : this.plans[index]?.days) ?? []],
 			});
-			this.addPlanModal.present();
 
 			const { data } = await this.addPlanModal.onDidDismiss();
 			if (!data) 
@@ -165,7 +154,7 @@ export default {
 			}
 		},
 
-		formatSelection(array, selectedIndexes) { // used for formating selected days into string
+		formatSelection(array, selectedIndexes) { //used for formating selected days into string
 			selectedIndexes = [...new Set(selectedIndexes)];
 			if (selectedIndexes.length == 1) 
 				return array[selectedIndexes[0]];
@@ -214,16 +203,12 @@ export default {
 		},
 
 		async showStatus() {
-			const status = this.status;
-			const toast = await this.toastController.create({
-                color: status == 0 ? "success" : "danger",
-                message: status == 0 ? "Zariadenie je online!" : status != 1 ? ("Chyba konektivity zariadenia: " + status) : "Zariadenie je offline!",
-                duration: 2500
-            });
-            toast.present();
+			const message = this.status == 0 ? "Zariadenie je online!" : this.status != 1 ? ("Chyba konektivity zariadenia: " + this.status) : "Zariadenie je offline!";
+			await this.toast(message, this.status == 0 ? "success" : "danger");
+			return message;
 		},
 
-		async sendPlansToDevice() { // send plans data to device
+		async sendPlansToDevice() { //send plans data to device
 			if (this.status)
 				return;
 
@@ -266,12 +251,7 @@ export default {
 			});
 			this.isFeeding = false;
 
-			const toast = await this.toastController.create({
-				color: reply.errMessage ? "danger" : "success",
-				message: reply.errMessage ?? "Davkovanie spustene!",
-				duration: 2500
-			});
-			toast.present();
+			await this.toast(reply.errMessage ?? "Davkovanie spustene!", reply.errMessage ? "danger" : "success");
 			
 			return reply; //return in case of further Promise action is required 
 		}
