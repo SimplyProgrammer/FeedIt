@@ -1,5 +1,5 @@
 <template>
-	<Modal title="Casový plán" ref="modal">
+	<Modal title="Časový plán" ref="modal">
 		<div>
 			<div class="grid-item">
 				<h4>Vyberte čas:</h4>

@@ -1,9 +1,9 @@
 <template>
 	<Modal :title="device ? 'Zariadenie' : 'Nové zariadenie'" ref="modal">
 		<h4>Názov zariadenia:</h4>
-		<ion-input type="text" placeholder="Nazov..." v-model.trim="name" class="ion-padding" :class="{invalid : isNameAssigned()}" ref="nameInput"></ion-input>
-		<h4 class="mt-1">Ip adresa:</h4>
-		<ion-input type="text" placeholder="Ip adresa..." v-model.trim="ip" class="ion-padding" :class="{invalid : isIpAssigned() || !isIpValid(ip) && ip.length}"></ion-input>
+		<ion-input type="text" placeholder="Názov..." v-model.trim="name" class="ion-padding" :class="{invalid : isNameAssigned()}" ref="nameInput"></ion-input>
+		<h4 class="mt-1">IP adresa:</h4>
+		<ion-input type="text" placeholder="IP adresa..." v-model.trim="ip" class="ion-padding" :class="{invalid : isIpAssigned() || !isIpValid(ip) && ip.length}"></ion-input>
 
 		<div class="buttons-wrapper">
 			<ion-button color="secondary" @click="$refs.modal.closeModal()">Zrušiť</ion-button>

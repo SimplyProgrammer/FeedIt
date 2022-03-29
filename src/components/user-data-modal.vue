@@ -1,11 +1,11 @@
 <template>
 	<Modal title="Užívateľské dáta" ref="modal">
 		<h4>Údaje o vašej sieti</h4>
-		<p>Aplikácia potrebujeudaje údaje o vašej sieti aby vedel komunikovať so zariadeniami! Pametajte že vaše mobilné zariadenie musí byť na rovnakej sieti ako zariadenie!</p>
+		<p>Aplikácia potrebuje údaje o vašej sieti aby vedela komunikovať so zariadeniami! Pamätajte že vaše mobilné zariadenie musí byť na rovnakej sieti ako zariadenie!</p>
 		<h6 class="mt-1">Názov vašej siete:</h6>
-		<ion-input type="text" placeholder="Moja domaca siet..." v-model.trim="networkName" class="ion-padding"></ion-input>
+		<ion-input type="text" placeholder="Moja domáca sieť..." v-model.trim="networkName" class="ion-padding"></ion-input>
 		<h6 class="mt-1">Heslo vašej siete:</h6>
-		<ion-input type="password" placeholder="Heslo domacej siete..." v-model.trim="networkPassword" class="ion-padding"></ion-input>
+		<ion-input type="password" placeholder="Heslo domácej siete..." v-model.trim="networkPassword" class="ion-padding"></ion-input>
 
 		<h4 class="mt-5">Vaše dáta</h4>
 		<p>Skopírujte, preneste a vložte tento text do iného mobilného zariadenia pre synchronizáciu vašich dát o zariadeniach!</p>
@@ -29,7 +29,6 @@
 </template>
 
 <script>
-
 import Modal from '@/components/Modal.vue';
 
 export default {
