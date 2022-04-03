@@ -38,7 +38,7 @@ Axios.defaults.timeout = 3000;
 Axios.defaults.httpsAgent = new https.Agent({
 	rejectUnauthorized: false,
 });
-// Axios.defaults.headers.common['Access-Control-Allow-Origin'] = '*';
+// Axios.defaults.headers.common['Access-Control-Allow-Origin'] = '*'; // NO not working!
 // Axios.defaults.headers.common['Access-Control-Allow-Methods'] = 'GET,PUT,POST,DELETE,PATCH,OPTIONS';
 
 const app = createApp(App).use(IonicVue).use(router);
@@ -89,7 +89,8 @@ app.mixin({
 			}),
 
 			modalController: modalController,
-			toastController: toastController
+			toastController: toastController,
+			http: "http"
 		}
 	},
 });

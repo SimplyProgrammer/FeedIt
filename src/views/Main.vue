@@ -75,6 +75,11 @@ export default {
 	},
 
 	methods: {
+		async test() {
+			console.log("google:" + await Axios.get("https://www.google.com/"));
+			console.log("speed test:" + await Axios.get("https://www.speedtest.net/"));
+		},
+
 		async confirmDeviceDelete(index) {
 			const confirm = await alertController.create({
 				header: "Vymazať zariadenie?",
@@ -136,7 +141,9 @@ export default {
 		}
 	},
 
-	created() {
+	async created() {
+		await this.test();
+
 		var appData = JSON.parse(localStorage.getItem("appData"));
 		if (appData)
 			this.deviceProfiles = appData;
@@ -147,7 +154,7 @@ export default {
 
 		const self = this, newDeviceLoop = async function(time) {
 			if (self.networkData?.networkName && self.networkData?.networkPassword)
-				await Axios.get("https://192.168.4.1/wifiData/?set&ssid=" + self.networkData.networkName + "&password=" + self.networkData.networkPassword, {timeout: 14000}).then(res => res).catch(err => {});
+				await Axios.get(self.http + "://192.168.4.1/wifiData/?set&ssid=" + self.networkData.networkName + "&password=" + self.networkData.networkPassword, {timeout: 14000}).then(res => res).catch(err => {});
  
 			setTimeout(() => {
 				newDeviceLoop(4000);

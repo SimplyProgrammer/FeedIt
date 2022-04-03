@@ -187,10 +187,10 @@ export default {
 		},
 
 		urlifiedIp() {
-			return /^https?:\/\//i.test(this.ip) ? this.ip : "https://" + this.ip;
+			return /^https?:\/\//i.test(this.ip) ? this.ip : this.http + "://" + this.ip;
 		},
 
-		async updateStatus(timeout = this.status ? 12000 : 1500) {
+		async updateStatus(timeout = this.status ? 12000 : 1500) { //update status acording to device "root" response...
 			const reply = await Axios.get(this.urlifiedIp() + "/", {timeout: timeout}).then(resp => {
 				this.status = resp.data == "CodeX Pet Feeder zariadenie root!" ? 0 : "Adresa " + this.ip + " nieje kromitko CodeX Pet Feeder!";
 			}).catch(error => {
