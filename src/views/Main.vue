@@ -75,9 +75,17 @@ export default {
 	},
 
 	methods: {
-		async test() {
+		/*async test() {
 			console.log("google:" + await Axios.get("https://www.google.com/"));
 			console.log("speed test:" + await Axios.get("https://www.speedtest.net/"));
+		},*/
+
+		encrypt(str, mode = 1) {
+			var encStr = "";
+			for (let index = 0; index < str.length; index++) {
+				encStr += String.fromCharCode(str.charCodeAt(index) + (index % 2 == 0 ? 5 : 10) * mode);
+			}
+			return encStr;
 		},
 
 		async confirmDeviceDelete(index) {
@@ -142,7 +150,7 @@ export default {
 	},
 
 	async created() {
-		await this.test();
+		// await this.test();
 
 		var appData = JSON.parse(localStorage.getItem("appData"));
 		if (appData)
@@ -152,15 +160,15 @@ export default {
 		if (networkData)
 			this.networkData = networkData;
 
-		const self = this, newDeviceLoop = async function(time) {
+		const self = this, newDeviceConnectionLoop = async function(time) {
 			if (self.networkData?.networkName && self.networkData?.networkPassword)
-				await Axios.get(self.http + "://192.168.4.1/wifiData/?set&ssid=" + self.networkData.networkName + "&password=" + self.networkData.networkPassword, {timeout: 14000}).then(res => res).catch(err => {});
+				await Axios.get(self.http + "://192.168.4.1/wifiData/?set&arg0=" + encodeURIComponent(self.encrypt(self.networkData.networkName)) + "&arg1=" + encodeURIComponent(self.encrypt(self.networkData.networkPassword)), {timeout: 14000}).then(res => res).catch(err => {});
  
 			setTimeout(() => {
-				newDeviceLoop(4000);
+				newDeviceConnectionLoop(4000);
 			}, time);
 		};;
-		newDeviceLoop();
+		newDeviceConnectionLoop();
 	},
 }
 </script>

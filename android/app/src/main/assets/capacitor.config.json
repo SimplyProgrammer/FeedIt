@@ -1,7 +1,0 @@
-{
-	"appId": "org.ugp.codex.feedit",
-	"appName": "Codex FeedIt",
-	"webDir": "dist",
-	"npmClient": "npm",
-	"bundledWebRuntime": false
-}

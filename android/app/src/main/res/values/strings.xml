@@ -1,7 +1,0 @@
-<?xml version='1.0' encoding='utf-8'?>
-<resources>
-    <string name="app_name">Codex FeedIt</string>
-    <string name="title_activity_main">Codex FeedIt</string>
-    <string name="package_name">org.ugp.codex.feedit</string>
-    <string name="custom_url_scheme">org.ugp.codex.feedit</string>
-</resources>
