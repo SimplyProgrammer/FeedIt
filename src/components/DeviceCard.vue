@@ -123,6 +123,10 @@ export default {
 			if (this.status == 0)
 				this.sendPlansToDevice();
 		},
+
+		isActive: function() {
+			console.log(this.isActive);
+		},
 	},
 
 	methods: {

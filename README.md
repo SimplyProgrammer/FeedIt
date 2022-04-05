@@ -23,5 +23,5 @@ npm run lint
 ### Customize configuration
 See [Configuration Reference](https://cli.vuejs.org/config/).
 
-### PWA link
-https://open-courses-21.netlify.app/home
+### PWA and WEB link
+https://sfcodex-feedit.6f.sk/ http://sfcodex-feedit.6f.sk/
