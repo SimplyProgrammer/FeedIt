@@ -1,4 +1,0 @@
-org/ugp/codex/feedit/BuildConfig.java
- org.ugp.codex.feedit.BuildConfig
-org/ugp/codex/feedit/MainActivity.java
- org.ugp.codex.feedit.MainActivity
