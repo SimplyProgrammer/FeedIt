@@ -1,28 +1,33 @@
 <template>
-	<Modal title="Užívateľské dáta" ref="modal">
-		<h4>Údaje o vašej sieti</h4>
-		<p>Aplikácia potrebuje údaje o vašej sieti aby vedela komunikovať so zariadeniami! Pamätajte že vaše mobilné zariadenie musí byť na rovnakej sieti ako zariadenie!</p>
-		<h6 class="mt-1">Názov vašej siete:</h6>
-		<ion-input type="text" placeholder="Moja domáca sieť..." v-model.trim="networkName" class="ion-padding"></ion-input>
-		<h6 class="mt-1">Heslo vašej siete:</h6>
-		<ion-input type="password" placeholder="Heslo domácej siete..." v-model.trim="networkPassword" class="ion-padding"></ion-input>
+	<Modal :title="lang().userData" ref="modal">
+		<h4>{{lang().networkData + ":"}}</h4>
+		<p>{{lang().networkDataMessage}}</p>
+		<h6 class="mt-1">{{lang().networkName + ":"}}</h6>
+		<ion-input type="text" :placeholder="lang().netowrkNamePlaceholder + '...'" v-model.trim="networkName" class="ion-padding"></ion-input>
+		<h6 class="mt-1">{{lang().networkPassword + ":"}}</h6>
+		<ion-input type="password" :placeholder="lang().networkPasswordPlaceholder + '...'" v-model.trim="networkPassword" class="ion-padding"></ion-input>
 
-		<h4 class="mt-5">Vaše dáta</h4>
-		<p>Skopírujte, preneste a vložte tento text do iného mobilného zariadenia pre synchronizáciu vašich dát o zariadeniach!</p>
+		<h4 class="mt-5">{{lang().yourData + ":"}}</h4>
+		<p>{{lang().yourDataMessage}}</p>
 		<textarea class="width-100" v-model.trim="data" :class="{invalid : !isValid()}"></textarea>
 		<div class="d-flex">
 			<ion-button color="light" class="small" @click="back()">
 				<ion-icon :icon="icons.arrow"></ion-icon>
 			</ion-button>
-			<ion-button color="light" @click="paste()">Vložiť</ion-button>
-			<ion-button color="light" @click="copy()">Kopírovať</ion-button>
+			<ion-button color="light" @click="paste()">{{lang().paste}}</ion-button>
+			<ion-button color="light" @click="copy()">{{lang().copy}}</ion-button>
 		</div>
 
+		<h4 class="mt-5">{{lang().language + ":"}}</h4>
+		<ion-select v-model="lng" :ok-text="lang().confirm" :cancel-text="lang().cancel">
+			<ion-select-option v-for="lang in langs" :value="lang.langName[0]" :key="lang.langName">{{lang.langName[1] + " - " +lang.langName[0].toUpperCase()}}</ion-select-option>
+		</ion-select>
+
 		<div class="buttons-wrapper">
-			<ion-button color="secondary" @click="$refs.modal.closeModal()" ref="cancel">Zrušiť</ion-button>
+			<ion-button color="secondary" @click="$refs.modal.closeModal()" ref="cancel">{{lang().cancel}}</ion-button>
 			<ion-button color="tertiary" @click="saveModal()" ref="save">
 				<ion-icon v-if="confirm" :icon="icons.checkmarkSharp"></ion-icon>
-				<div v-else>Potvrdiť</div> 
+				<div v-else>{{lang().confirm}}</div> 
 			</ion-button>
 		</div>
 	</Modal>
@@ -43,7 +48,8 @@ export default {
 			networkName: "",
 			networkPassword: "",
 			changeCount: 0,
-			confirm: 0
+			confirm: 0,
+			lng: localStorage.getItem("lang") ?? "en",
 		}
 	},
 
@@ -61,6 +67,10 @@ export default {
 			this.oldData = oldV;
 			this.changeCount++;
 			this.confirm = 0;
+		},
+
+		lng: function() {
+			this.setLang(this.lng);
 		}
 	},
 
@@ -84,15 +94,29 @@ export default {
 		},
 
 		async paste() {
-			this.data = await navigator.clipboard.readText();
+			try
+			{
+				this.data = await navigator.clipboard.readText();
 
-			return await this.toast("Text vložený!");
+				return await this.toast(this.lang().prompts.textPasted);
+			}
+			catch (err)
+			{
+				return await this.toast(this.lang().prompts.unsupportedOperation, "danger");
+			}
 		},
 
 		async copy() {
-			navigator.clipboard.writeText(this.data);
+			try
+			{
+				navigator.clipboard.writeText(this.data);
 
-			return await this.toast("Text skopírovaný!");
+				return await this.toast(this.lang().prompts.textCopied);
+			}
+			catch (err)
+			{
+				return await this.toast(this.lang().prompts.unsupportedOperation, "danger");
+			}
 		},
 
 		back() {
@@ -118,7 +142,7 @@ export default {
 				});
 			}
 
-			return await this.toast("Zadané dáta sú chybné!", "danger");
+			return await this.toast(this.lang().prompts.invalidData, "danger");
 		},
 	}
 };
@@ -158,6 +182,18 @@ textarea {
 	ion-button {
 		flex: 1;
 		height: 30px;
+	}
+}
+
+ion-select {
+	margin-top: 4px;
+	--padding-start: 0px !important;
+	--padding-bottom: 8px !important;
+	border-bottom: 1px lightgray solid;
+	transition: 0.1s;
+
+	&:active {
+		background: var(--ion-color-light);
 	}
 }
 </style>

@@ -28,12 +28,12 @@
 				</div>
 			</ion-card-header>
 
-			<ion-button expand="block" class="mb-3" color="tertiary" @click.self="feed()" :disabled="isFeeding">{{isFeeding ? "Dávkovanie prebieha..." : "Spustiť teraz"}}</ion-button>
+			<ion-button expand="block" class="mb-3" color="tertiary" @click.self="feed()" :disabled="isFeeding">{{isFeeding ? lang().feedingInProg : lang().runNow}}</ion-button>
 
 			<ion-list lines="none">
 				<ion-list-header class="mb-2">
 					<ion-item>
-						<h2 slot="start">Časové plány</h2>
+						<h2 slot="start">{{lang().timePlans}}</h2>
 						<ion-icon :icon="icons.add" slot="end" @click="openPlanModal()"></ion-icon>
 					</ion-item>
 				</ion-list-header>
@@ -93,15 +93,7 @@ export default {
 
 	data() {
 		return {
-			selectableDays: [
-				"Pondelok",
-				"Utorok",
-				"Streda",
-				"Štvrtok",
-				"Piatok",
-				"Sobota", 
-				"Nedela"
-			],
+			selectableDays: [],
 			isFeeding: false,
 			status: 1
 		}
@@ -124,16 +116,16 @@ export default {
 				this.sendPlansToDevice();
 		},
 
-		isActive: function() {
-			console.log(this.isActive);
-		},
+		// isActive: function() {
+		// 	console.log(this.isActive);
+		// },
 	},
 
 	methods: {
 		async openPlanModal(index = -1) {
 			if (index == -1 && this.plans.length >= 12)
 			{
-				return await this.toast("Priveľa časových plánov!", "danger");
+				return await this.toast(this.lang().prompts.tooManyTimePlans, "danger");
 			}
 				
 			this.addPlanModal = await this.modal(AddPlanModal, {
@@ -196,7 +188,7 @@ export default {
 
 		async updateStatus(timeout = this.status ? 12000 : 1500) { //update status acording to device "root" response...
 			const reply = await Axios.get(this.urlifiedIp() + "/", {timeout: timeout}).then(resp => {
-				this.status = resp.data == "CodeX Pet Feeder zariadenie root!" ? 0 : "Adresa " + this.ip + " nieje kromitko CodeX Pet Feeder!";
+				this.status = resp.data == "CodeX Pet Feeder zariadenie root!" ? 0 : this.lang().prompts.notFeederIp.replace("XXXX", this.ip);
 			}).catch(error => {
 				if (!error.response || error.code == 'ECONNABORTED')
 					this.status = 1;
@@ -207,7 +199,7 @@ export default {
 		},
 
 		async showStatus() {
-			const message = this.status == 0 ? "Zariadenie je online!" : this.status != 1 ? ("Chyba konektivity zariadenia: " + this.status) : "Zariadenie je offline!";
+			const message = this.status == 0 ? this.lang().prompts.deviceIsOnline : this.status != 1 ? (this.lang().prompts.connectivityErr + ": " + this.status) : this.lang().prompts.deviceIsOffline;
 			await this.toast(message, this.status == 0 ? "success" : "danger");
 			return message;
 		},
@@ -249,13 +241,13 @@ export default {
 				if (!error.response || error.code == 'ECONNABORTED')
 				{
 					this.status = 1;
-					return {errMessage: "Zariadenie je offline! Dávkovanie zlyhalo!" /*+ msg.charAt(0).toUpperCase() + msg.slice(1)*/};
+					return {errMessage: this.lang().prompts.deviceIsOffline + " " + this.lang().prompts.feedingFailed /*+ msg.charAt(0).toUpperCase() + msg.slice(1)*/};
 				}
-				return {errMessage: "Dávkovanie zlyhalo!" /*+ msg.charAt(0).toUpperCase() + msg.slice(1)*/};
+				return {errMessage: this.lang().prompts.feedingFailed /*+ msg.charAt(0).toUpperCase() + msg.slice(1)*/};
 			});
 			this.isFeeding = false;
 
-			await this.toast(reply.errMessage ?? "Dávkovanie spustené!", reply.errMessage ? "danger" : "success");
+			await this.toast(reply.errMessage ?? this.lang().prompts.feedingInit, reply.errMessage ? "danger" : "success");
 			
 			return reply; //return in case of further Promise action is required 
 		}
@@ -263,6 +255,9 @@ export default {
 
 	mounted() {
 		//Keep alive loop for status update
+
+		this.selectableDays = this.lang().days;
+
 		const self = this;
 		this.keepAliveLoop = async function(time) {
 			await self.updateStatus();	

@@ -41,6 +41,8 @@ Axios.defaults.httpsAgent = new https.Agent({
 // Axios.defaults.headers.common['Access-Control-Allow-Origin'] = '*'; // NO not working!
 // Axios.defaults.headers.common['Access-Control-Allow-Methods'] = 'GET,PUT,POST,DELETE,PATCH,OPTIONS';
 
+import langs from '@/assets/lang/langs.json';
+
 const app = createApp(App).use(IonicVue).use(router);
 
 // Global utility
@@ -65,11 +67,26 @@ app.mixin({
 			});
 			toast.present();
 			return toast;
+		},
+
+		setLang(lang) {
+			if (this.language == lang)
+				return;
+
+			localStorage.setItem("lang", this.language = lang);
+			this.$router.go(0);
+		},
+
+		lang() {
+			return this.langs[this.language];
 		}
 	},
 
 	data() {
 		return {
+			langs: langs,
+			language: localStorage.getItem("lang") ?? "en",
+
 			//Utlity pre icony, nemusim zvlast importovat jak blb kazdu ikonu proste napisem napr :icon="icons.add"
 			icons: new Proxy(Object.keys(AllIcons).reduce((map, elem) => {
 				map[elem.toLowerCase()] = AllIcons[elem];
@@ -92,7 +109,7 @@ app.mixin({
 			toastController: toastController,
 			http: "http"
 		}
-	},
+	}
 });
 
 router.isReady().then(() => {

@@ -1,13 +1,13 @@
 <template>
-	<Modal :title="device ? 'Zariadenie' : 'Nové zariadenie'" ref="modal">
-		<h4>Názov zariadenia:</h4>
-		<ion-input type="text" placeholder="Názov..." v-model.trim="name" class="ion-padding" :class="{invalid : isNameAssigned()}" ref="nameInput"></ion-input>
-		<h4 class="mt-1">IP adresa:</h4>
-		<ion-input type="text" placeholder="IP adresa..." v-model.trim="ip" class="ion-padding" :class="{invalid : isIpAssigned() || !isIpValid(ip) && ip.length}"></ion-input>
+	<Modal :title="device ? lang().device : lang().newDevice" ref="modal">
+		<h4>{{lang().deviceName + ":"}}</h4>
+		<ion-input type="text" :placeholder="lang().name + '...'" v-model.trim="name" class="ion-padding" :class="{invalid : isNameAssigned()}" ref="nameInput"></ion-input>
+		<h4 class="mt-1">{{lang().ip + ":"}}</h4>
+		<ion-input type="text" :placeholder="lang().ip + '...'" v-model.trim="ip" class="ion-padding" :class="{invalid : isIpAssigned() || !isIpValid(ip) && ip.length}"></ion-input>
 
 		<div class="buttons-wrapper">
-			<ion-button color="secondary" @click="$refs.modal.closeModal()">Zrušiť</ion-button>
-			<ion-button color="tertiary" @click="saveModal()">Potvrdiť</ion-button>
+			<ion-button color="secondary" @click="$refs.modal.closeModal()">{{lang().cancel}}</ion-button>
+			<ion-button color="tertiary" @click="saveModal()">{{lang().confirm}}</ion-button>
 		</div>
 	</Modal>
 </template>
@@ -70,10 +70,10 @@ export default {
 		},
 
 		async saveModal() {
-			var message = !(this.name && this.ip) ? "Prosím vyplňte všetky údaje!" : 
-							this.isNameAssigned() ? "Zariadenie s týmto názvom už exsistuje!" : 
-							this.isIpAssigned() ? "Zariadenie s touto IP už existuje!" : 
-							!this.isIpValid(this.ip) ? "Nesprávny formát ip IP adresy!" : undefined;
+			var message = !(this.name && this.ip) ? this.lang().prompts.fillAll : 
+							this.isNameAssigned() ? this.lang().prompts.deviceNameAlreadyAdded : 
+							this.isIpAssigned() ? this.lang().prompts.deviceIpAlreadyAdded : 
+							!this.isIpValid(this.ip) ? this.lang().prompts.invalidIpFormat : undefined;
 
 			if (message)
 			{

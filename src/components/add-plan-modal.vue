@@ -1,18 +1,18 @@
 <template>
-	<Modal title="Časový plán" ref="modal">
+	<Modal :title="lang().timePlan" ref="modal">
 		<div>
 			<div class="grid-item">
-				<h4>Vyberte čas:</h4>
+				<h4>{{lang().choseTime + ":"}}</h4>
 				<ion-datetime class="time-picker" size="cover" hour-cycle="h23" presentation="time" mode="md" :value="modalTime" @ionChange="modalTime = $event.target.value"></ion-datetime>
 			</div>
 
-			<h4>Vyberte dni:</h4>
-			<Selection :values="selectableDays.map(day => day.substring(0, 1))" ref="selection"/>
+			<h4>{{lang().choseDays + ":"}}</h4>
+			<Selection :values="selectableDays.map(day => day.substring(0, 2))" ref="selection"/>
 		</div>
 
 		<div class="buttons-wrapper">
-			<ion-button color="secondary" @click="$refs.modal.closeModal()" ref="cancel">Zrušiť</ion-button>
-			<ion-button color="tertiary" @click="saveModal()" ref="save">Potvrdiť</ion-button>
+			<ion-button color="secondary" @click="$refs.modal.closeModal()" ref="cancel">{{lang().cancel}}</ion-button>
+			<ion-button color="tertiary" @click="saveModal()" ref="save">{{lang().confirm}}</ion-button>
 		</div>
 	</Modal>
 </template>
@@ -54,7 +54,7 @@ export default {
 		async saveModal() {
 			var days = this.$refs.selection.selectedValues;
 
-			var message = days.length <= 0 ? "Prosím vyberte aspoň 1 deň!" : undefined;
+			var message = days.length <= 0 ? this.lang().prompts.selectDay : undefined;
 
 			if (message)
 			{

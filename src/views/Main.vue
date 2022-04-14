@@ -12,15 +12,15 @@
 					</swiper>
 				</div>
 				<div v-else class="instructions">
-					<h1>Vitajte!</h1>
+					<h1>{{lang().welcome + "!"}}</h1>
 					<div class="ion-padding" @click="openUserDataModal()">
-						<h4>Užívateľské dáta!</h4>
-						<p>Zadajte prihlasovacie údaje do vašej domácej siete a umožnite komunikáciu so zariadeniami!</p>
-						<p class="mt-1">Vložte vaše už existujúce dáta pre synchronizáciu údajov z iného mobilného zariadenia!</p>
+						<h4>{{lang().userData + "!"}}</h4>
+						<p>{{lang().userDataMessage}}</p>
+						<p class="mt-1">{{lang().userDataMessage2}}</p>
 					</div>
 					<div class="ion-padding" @click="openDeviceModal()">
-						<h4>Nové zaradenie!</h4>
-						<p>Pridajte vaše zariadenie pre jednoduché nastavenie časových plánov!</p>
+						<h4>{{lang().newDevice + "!"}}</h4>
+						<p>{{lang().timeplansMessage}}</p>
 					</div>
 				</div>
 			</transition-group>
@@ -75,6 +75,7 @@ export default {
 	},
 
 	methods: {
+		
 		/*async test() {
 			console.log("google:" + await Axios.get("https://www.google.com/"));
 			console.log("speed test:" + await Axios.get("https://www.speedtest.net/"));
@@ -90,12 +91,12 @@ export default {
 
 		async confirmDeviceDelete(index) {
 			const confirm = await alertController.create({
-				header: "Vymazať zariadenie?",
-				message: "Naozaj chcete trvalo odstrániť toto zariadenie a všetky jeho časové plány?",
+				header: this.lang().deleteDevice + "?",
+				message: this.lang().confirmDeleteDevice,
 				buttons: [
-					"Zrušiť", 
+					this.lang().cancel, 
 					{
-						text: "Potvrdiť",
+						text: this.lang().confirm,
 						handler: () => {
 							this.deviceProfiles.splice(index, 1);
 						},
