@@ -38,7 +38,7 @@ Axios.defaults.timeout = 3000;
 Axios.defaults.httpsAgent = new https.Agent({
 	rejectUnauthorized: false,
 });
-// Axios.defaults.headers.common['Access-Control-Allow-Origin'] = '*'; // NO not working!
+// Axios.defaults.headers.common['Access-Control-Allow-Origin'] = '*'; // NOPE not working!
 // Axios.defaults.headers.common['Access-Control-Allow-Methods'] = 'GET,PUT,POST,DELETE,PATCH,OPTIONS';
 
 import langs from '@/assets/lang/langs.json';
@@ -49,6 +49,13 @@ const app = createApp(App).use(IonicVue).use(router);
 app.mixin({
 	methods: {
 		async modal(modalComponent, componentProps = {}) {
+			if (await this.modalController.getTop())
+				return {
+					onDidDismiss: () => { 
+						return {};
+					}
+				};
+
 			const modal = await this.modalController.create({
 				component: modalComponent,
 				breakpoints: [0, 1],
@@ -67,6 +74,12 @@ app.mixin({
 			});
 			toast.present();
 			return toast;
+		},
+
+		isIpValid(str) {
+			if (str)
+				return /^(https?:\/\/)?(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)(\:[0-9]?[0-9]?[0-9]?[0-9]?)?$/.test(str);
+			return false;
 		},
 
 		setLang(lang) {

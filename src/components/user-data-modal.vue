@@ -20,7 +20,7 @@
 
 		<h4 class="mt-5">{{lang().language + ":"}}</h4>
 		<ion-select v-model="lng" :ok-text="lang().confirm" :cancel-text="lang().cancel">
-			<ion-select-option v-for="lang in langs" :value="lang.langName[0]" :key="lang.langName">{{lang.langName[1] + " - " +lang.langName[0].toUpperCase()}}</ion-select-option>
+			<ion-select-option v-for="lang in Object.keys(langs)" :value="lang" :key="lang">{{langs[lang].langName + " - " + lang.toUpperCase()}}</ion-select-option>
 		</ion-select>
 
 		<div class="buttons-wrapper">

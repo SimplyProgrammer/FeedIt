@@ -76,10 +76,10 @@ export default {
 
 	methods: {
 		
-		/*async test() {
-			console.log("google:" + await Axios.get("https://www.google.com/"));
-			console.log("speed test:" + await Axios.get("https://www.speedtest.net/"));
-		},*/
+		// async test() {
+		// 	console.log("google:" + await Axios.get("https://www.google.com/"));
+		// 	console.log("speed test:" + await Axios.get("https://www.speedtest.net/"));
+		// },
 
 		encrypt(str, mode = 1) {
 			var encStr = "";
@@ -119,12 +119,13 @@ export default {
 				this.deviceProfiles = data.data;
 		},
 
-		async openDeviceModal(index = -1) {
+		async openDeviceModal(index = -1, ip = "", message = null) {
 			this.addDeviceModal = await this.modal(AddDeviceModal, {
 				device: index == -1 ? undefined : this.deviceProfiles[index],
 				name: index == -1 ? "" : this.deviceProfiles[index].name,
-				ip: index == -1 ? "" : this.deviceProfiles[index].ip,
-				deviceProfiles: this.deviceProfiles
+				ip: index == -1 ? ip : this.deviceProfiles[index].ip,
+				deviceProfiles: this.deviceProfiles,
+				message: message
 			});
 
 			const { data } = await this.addDeviceModal.onDidDismiss();
@@ -163,7 +164,12 @@ export default {
 
 		const self = this, newDeviceConnectionLoop = async function(time) {
 			if (self.networkData?.networkName && self.networkData?.networkPassword)
-				await Axios.get(self.http + "://192.168.4.1/wifiData/?set&arg0=" + encodeURIComponent(self.encrypt(self.networkData.networkName)) + "&arg1=" + encodeURIComponent(self.encrypt(self.networkData.networkPassword)), {timeout: 14000}).then(res => res).catch(err => {});
+			{
+				await Axios.get(self.http + "://192.168.4.1/wifiData?set&arg0=" + encodeURIComponent(self.encrypt(self.networkData.networkName)) + "&arg1=" + encodeURIComponent(self.encrypt(self.networkData.networkPassword)), {timeout: 14000}).then(async resp => {
+					if (self.isIpValid(resp.data) && resp.data != "0.0.0.0")
+						await self.openDeviceModal(-1, resp.data, self.lang().deviceConnected);
+				}).catch(err => {});
+			}
  
 			setTimeout(() => {
 				newDeviceConnectionLoop(4000);

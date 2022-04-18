@@ -20,7 +20,7 @@
 				<div class="description">
 					<h1>{{name}}</h1>
 					<div class="w-fit d-flex ion-align-items-center margin-auto" @click="showStatus()">
-						<p>Status:</p>
+						<p>{{lang().status + ":"}}</p>
 						<div v-if="status == 0" class="indicator online"></div>
 						<div v-else-if="status == 1" class="indicator offline"></div>
 						<div v-else class="indicator error"></div>

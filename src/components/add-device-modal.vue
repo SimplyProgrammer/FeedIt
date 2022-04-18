@@ -1,5 +1,7 @@
 <template>
 	<Modal :title="device ? lang().device : lang().newDevice" ref="modal">
+		<p v-if="message">{{message}}</p>
+
 		<h4>{{lang().deviceName + ":"}}</h4>
 		<ion-input type="text" :placeholder="lang().name + '...'" v-model.trim="name" class="ion-padding" :class="{invalid : isNameAssigned()}" ref="nameInput"></ion-input>
 		<h4 class="mt-1">{{lang().ip + ":"}}</h4>
@@ -46,6 +48,11 @@ export default {
 			default: undefined
 		},
 
+		message: {
+			type: String,
+			default: ""
+		},
+
 		deviceProfiles: {
 			type: Array,
 			default: []
@@ -63,10 +70,6 @@ export default {
 
 		isIpAssigned() {
 			return this.deviceProfiles.some(elm => elm.ip == this.ip) && this.ip != this.device?.ip
-		},
-
-		isIpValid(str) {
-			return /^(https?:\/\/)?(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)(\:[0-9]?[0-9]?[0-9]?[0-9]?)?$/.test(str);
 		},
 
 		async saveModal() {
@@ -90,6 +93,11 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+p {
+	margin-top: 2px;
+	margin-bottom: 20px;
+}
+
 h4 {
 	margin-bottom: 0px;
 }

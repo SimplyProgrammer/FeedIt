@@ -1,6 +1,6 @@
 {
 	"sk": {
-		"langName": ["sk", "Slovak"],
+		"langName": "Slovak",
 
 		"welcome": "Vitajte",
 		"userData": "Užívateľské dáta",
@@ -22,6 +22,8 @@
 		"choseDays": "Vyberte dni",
 		"runNow": "Spustiť teraz",
 		"feedingInProg": "Dávkovanie prebieha...",
+		"status": "Status",
+		"deviceConnected": "Nové zariadenie bolo pripojené a identifikované! Chcete ho pridať?",
 		"networkData": "Údaje o vašej sieti",
 		"networkDataMessage": "Aplikácia potrebuje údaje o vašej sieti aby vedela komunikovať so zariadeniami! Pamätajte že vaše mobilné zariadenie musí byť na rovnakej sieti ako zariadenie!",
 		"networkName": "Názov vašej siete",
@@ -33,6 +35,12 @@
 		"copy": "Kopírovať",
 		"paste": "Vložiť",
 		"language": "Jazyk",
+
+		"sizes": [
+			"Malá",
+			"Stredná",
+			"Veľká"
+		],
 
 		"days": [
 			"Pondelok",
@@ -65,7 +73,7 @@
 	},
 
 	"en": {
-		"langName": ["en", "English"],
+		"langName": "English",
 
 		"welcome": "Welcome",
 		"userData": "User data",
@@ -87,6 +95,8 @@
 		"choseDays": "Select days",
 		"runNow": "Feed now",
 		"feedingInProg": "Feeding in progress...",
+		"status": "Status",
+		"deviceConnected": "New device has been connected and identified! Do you want to add it?",
 		"networkData": "Your LAN credentials",
 		"networkDataMessage": "The application needs data about your network (LAN) to be able to communicate with devices! Remember that your mobile device must be on the same network (LAN) as the device!",
 		"networkName": "Your LAN name",
@@ -98,6 +108,12 @@
 		"copy": "Copy",
 		"paste": "Paste",
 		"language": "Language",
+
+		"sizes": [
+			"Small",
+			"Medium",
+			"Large"
+		],
 
 		"days": [
 			"Monday",
