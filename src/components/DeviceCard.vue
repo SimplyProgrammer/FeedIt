@@ -21,9 +21,7 @@
 					<h1>{{name}}</h1>
 					<div class="w-fit d-flex ion-align-items-center margin-auto" @click="showStatus()">
 						<p>{{lang().status + ":"}}</p>
-						<div v-if="status == 0" class="indicator online"></div>
-						<div v-else-if="status == 1" class="indicator offline"></div>
-						<div v-else class="indicator error"></div>
+						<div class="indicator" :class="{online: status == 0, offline: status == 1, error: status != 0 && status != 1}"></div>
 					</div>
 				</div>
 			</ion-card-header>
@@ -32,7 +30,7 @@
 
 			<ion-item class="mb-3 size">
 				<ion-label>{{lang().emissionSize + ":"}}</ion-label>
-				<ion-select interface="action-sheet" v-model="emissionSize" :value="lang().sizes[1]" :cancel-text="lang().cancel">
+				<ion-select interface="action-sheet" v-model="emissionData.size" :value="lang().sizes[1]" :cancel-text="lang().cancel">
 					<ion-select-option v-for="(size, i) in lang().sizes" :value="i" :key="i">{{size}}</ion-select-option>
 				</ion-select>
 			</ion-item>
@@ -93,6 +91,10 @@ export default {
 			type: Array
 		},
 
+		emissionData: {
+			type: Object
+		},
+
 		plans: {
 			type: Array
 		}
@@ -101,7 +103,6 @@ export default {
 	data() {
 		return {
 			selectableDays: [],
-			emissionSize: 1,
 			isFeeding: false,
 			status: 1
 		}
@@ -127,7 +128,7 @@ export default {
 			}
 		},
 
-		emissionSize: function() {
+		'emissionData.size': function() {
 			this.sendEmissionSize();
 		},
 
@@ -253,7 +254,7 @@ export default {
 
 			try
 			{
-				await Axios.get(this.urlifiedIp() + "/feedTime?set=" + this.emissionSize);
+				await Axios.get(this.urlifiedIp() + "/feedTime?set=" + this.emissionData.size);
 			}
 			catch (err)
 			{
@@ -283,10 +284,9 @@ export default {
 	},
 
 	mounted() {
-		//Keep alive loop for status update
-
 		this.selectableDays = this.lang().days;
 
+		//Keep alive loop for status update
 		const self = this;
 		this.keepAliveLoop = async function(time) {
 			await self.updateStatus();	

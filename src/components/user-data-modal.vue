@@ -81,7 +81,7 @@ export default {
 				{ 
 					var obj = JSON.parse(this.data);
 					obj.forEach(element => {
-						if (!element.ip || !element.name || !element.plans)
+						if (!element.ip || !element.name || !element.plans || element?.emissionData.size == undefined)
 							return obj = false;
 					});
 					return obj;

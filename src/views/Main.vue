@@ -135,6 +135,9 @@ export default {
 			if (index == -1)
 			{
 				data.plans = [];
+				data.emissionData = {
+					size: 1
+				};
 				this.deviceProfiles.push(data);
 
 				if (this.deviceProfiles.length > 1)
