@@ -28,10 +28,17 @@
 				</div>
 			</ion-card-header>
 
-			<ion-button expand="block" class="mb-3" color="tertiary" @click.self="feed()" :disabled="isFeeding">{{isFeeding ? lang().feedingInProg : lang().runNow}}</ion-button>
+			<ion-button expand="block" class="mb-1" color="tertiary" @click.self="feed()" :disabled="isFeeding">{{isFeeding ? lang().feedingInProg : lang().runNow}}</ion-button>
+
+			<ion-item class="mb-3 size">
+				<ion-label>{{lang().emissionSize + ":"}}</ion-label>
+				<ion-select interface="action-sheet" v-model="emissionSize" :value="lang().sizes[1]" :cancel-text="lang().cancel">
+					<ion-select-option v-for="(size, i) in lang().sizes" :value="i" :key="i">{{size}}</ion-select-option>
+				</ion-select>
+			</ion-item>
 
 			<ion-list lines="none">
-				<ion-list-header class="mb-2">
+				<ion-list-header class="mb-1">
 					<ion-item>
 						<h2 slot="start">{{lang().timePlans}}</h2>
 						<ion-icon :icon="icons.add" slot="end" @click="openPlanModal()"></ion-icon>
@@ -94,6 +101,7 @@ export default {
 	data() {
 		return {
 			selectableDays: [],
+			emissionSize: 1,
 			isFeeding: false,
 			status: 1
 		}
@@ -113,7 +121,14 @@ export default {
 
 		status: function() {
 			if (this.status == 0)
+			{
 				this.sendPlansToDevice();
+				this.sendEmissionSize();
+			}
+		},
+
+		emissionSize: function() {
+			this.sendEmissionSize();
 		},
 
 		// isActive: function() {
@@ -225,6 +240,20 @@ export default {
 					// console.log(request); 
 					await Axios.get(request);
 				}
+			}
+			catch (err)
+			{
+				await this.updateStatus();
+			}
+		},
+
+		async sendEmissionSize() {
+			if (this.status)
+				return;
+
+			try
+			{
+				await Axios.get(this.urlifiedIp() + "/feedTime?set=" + this.emissionSize);
 			}
 			catch (err)
 			{

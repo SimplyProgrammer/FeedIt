@@ -51,7 +51,7 @@ app.mixin({
 		async modal(modalComponent, componentProps = {}) {
 			if (await this.modalController.getTop())
 				return {
-					onDidDismiss: () => { 
+					onDidDismiss: () => {
 						return {};
 					}
 				};

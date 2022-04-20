@@ -165,8 +165,10 @@ export default {
 		const self = this, newDeviceConnectionLoop = async function(time) {
 			if (self.networkData?.networkName && self.networkData?.networkPassword)
 			{
-				await Axios.get(self.http + "://192.168.4.1/wifiData?set&arg0=" + encodeURIComponent(self.encrypt(self.networkData.networkName)) + "&arg1=" + encodeURIComponent(self.encrypt(self.networkData.networkPassword)), {timeout: 14000}).then(async resp => {
-					if (self.isIpValid(resp.data) && resp.data != "0.0.0.0")
+				const wifiDataQuery = "?set&arg0=" + encodeURIComponent(self.encrypt(self.networkData.networkName)) + "&arg1=" + encodeURIComponent(self.encrypt(self.networkData.networkPassword));
+
+				await Axios.get(self.http + "://192.168.4.1/wifiData" + wifiDataQuery, {timeout: 14000}).then(async resp => {
+					if (self.isIpValid(resp.data) && resp.data != "0.0.0.0" && !self.deviceProfiles.some(elm => elm.ip == resp.data))
 						await self.openDeviceModal(-1, resp.data, self.lang().deviceConnected);
 				}).catch(err => {});
 			}

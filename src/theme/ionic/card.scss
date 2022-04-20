@@ -25,6 +25,12 @@
 		height: 100%;
 		padding: 15px;
 
+		.size {
+			--padding-start: 5px;
+			--padding-end: 5px;
+			--transition: 0.1s;
+		}
+
 		ion-card-header {
 			padding: 0 0 15px 0;
 	
