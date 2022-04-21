@@ -159,7 +159,13 @@ export default {
 
 		var appData = JSON.parse(localStorage.getItem("appData"));
 		if (appData)
-			this.deviceProfiles = appData;
+		{
+			(this.deviceProfiles = appData).forEach(elm => {
+				elm.emissionData ??= {
+					size: 1
+				};
+			});
+		}
 
 		var networkData = JSON.parse(localStorage.getItem("networkData"));
 		if (networkData)
