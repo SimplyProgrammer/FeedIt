@@ -9,7 +9,7 @@
 
 		<h4 class="mt-5">{{lang().yourData + ":"}}</h4>
 		<p>{{lang().yourDataMessage}}</p>
-		<textarea class="width-100" v-model.trim="data" :placeholder="lang('yourDataPlaceholder')+ '...' " :class="{invalid : !isValid()}" ref="textarea"></textarea>
+		<textarea class="width-100" v-model.trim="data" :placeholder="lang('yourDataPlaceholder') + '...' " :class="{invalid : !isValid()}" ref="textarea"></textarea>
 		<div class="d-flex">
 			<!-- <ion-button color="light" class="small" @click="back()">
 				<ion-icon :icon="icons.arrow"></ion-icon>
@@ -179,6 +179,10 @@ textarea {
 	border: 1px solid gray;
 	border-radius: 8px;
 	resize: vertical;
+
+	&:focus {
+		box-shadow: 0px 0px 15px -6px rgba(0, 0, 0, 0.6);
+	}
 
 	&.invalid {
 		background: rgba(255, 0, 0, 0.22);

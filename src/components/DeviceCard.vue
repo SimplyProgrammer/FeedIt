@@ -16,11 +16,11 @@
 
 		<div class="content">
 			<ion-card-header>
-				<img src="@/assets/imgs/krmitko1.png" alt="">
+				<img src="@/assets/imgs/krmitko1.png" alt="device img">
 				<div class="description">
 					<h1>{{name}}</h1>
 					<div class="w-fit d-flex ion-align-items-center margin-auto" @click="showStatus()">
-						<p>{{lang().status + ":"}}</p>
+						<p>{{(lang().status[status] ?? lang().status[2]) + ":"}}</p>
 						<div class="indicator" :class="{online: status == 0, offline: status == 1, error: status != 0 && status != 1}"></div>
 					</div>
 				</div>
@@ -38,7 +38,7 @@
 			<ion-list lines="none">
 				<ion-list-header class="mb-1">
 					<ion-item>
-						<h2 slot="start">{{lang().timePlans}}</h2>
+						<h2 slot="start" @click="status++">{{lang().timePlans}}</h2>
 						<ion-icon :icon="icons.add" slot="end" @click="openPlanModal()"></ion-icon>
 					</ion-item>
 				</ion-list-header>

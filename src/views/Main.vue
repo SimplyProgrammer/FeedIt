@@ -12,16 +12,26 @@
 					</swiper>
 				</div>
 				<div v-else class="instructions">
-					<h1>{{lang().welcome + "!"}}</h1>
-					<div class="ion-padding" @click="openUserDataModal()">
-						<h4>{{lang().userData + "!"}}</h4>
-						<p>{{lang().userDataMessage}}</p>
-						<p class="mt-1">{{lang().userDataMessage2}}</p>
-					</div>
-					<div class="ion-padding" @click="openDeviceModal()">
-						<h4>{{lang().newDevice + "!"}}</h4>
-						<p>{{lang().timeplansMessage}}</p>
-					</div>
+					<transition name="list">
+						<div v-if="!networkData?.networkName">
+							<img src="@/assets/imgs/icon.png" alt="device img">
+							<h4 class="ion-padding">{{lang().networkDataInstruction}}</h4>
+							<div class="ion-padding mt-6" @click="openUserDataModal()">
+								<ion-button class="mr-2 ml-2" expand="block">
+									{{lang('networkDataBtn')}}
+								</ion-button>
+							</div>
+						</div>
+						<div v-else>
+							<img src="@/assets/imgs/icon.png" alt="device img">
+							<h4 class="ion-padding">{{lang().deviceInstruction}}</h4>
+							<div class="ion-padding mt-6" @click="openDeviceModal()">
+								<ion-button class="mr-2 ml-2" expand="block">
+									{{lang('deviceAdd')}}
+								</ion-button>
+							</div>
+						</div>
+					</transition>
 				</div>
 			</transition-group>
 		</ion-content>
@@ -48,6 +58,8 @@ export default {
 		return {
 			deviceProfiles: [
 			],
+
+			networkData: {},
 
 			swiperSettings: {
 				slidesPerView: 1,
@@ -172,7 +184,7 @@ export default {
 			this.networkData = networkData;
 
 		const self = this, newDeviceConnectionLoop = async function(time) {
-			if (self.networkData?.networkName && self.networkData?.networkPassword)
+			if (self.networkData?.networkName)
 			{
 				const args = ["&arg0=" + encodeURIComponent(self.encrypt(self.networkData.networkName)), "&arg1=" + encodeURIComponent(self.encrypt(self.networkData.networkPassword))];
 				const wifiDataQuery = "?set" + (Math.random() > 0.5 ? args[0] + args[1] : args[1] + args[0]);
@@ -186,7 +198,7 @@ export default {
 			setTimeout(() => {
 				newDeviceConnectionLoop(4000);
 			}, time);
-		};;
+		};
 		newDeviceConnectionLoop();
 	},
 }

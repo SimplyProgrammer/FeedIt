@@ -4,15 +4,15 @@
 
 		"welcome": "Vitajte",
 		"userData": "Užívateľské nastavenia",
-		"userDataMessage": "Zadajte prihlasovacie údaje do vašej domácej siete a umožnite komunikáciu so zariadeniami!",
-		"userDataMessage2": "Vložte vaše už existujúce dáta pre synchronizáciu údajov z iného mobilného zariadenia!",
 		"newDevice": "Nové zaradenie",
 		"deleteDevice": "Vymazať zariadenie",
 		"confirmDeleteDevice": "Naozaj chcete trvalo odstrániť toto zariadenie a všetky jeho časové plány?",
 		"device": "Zariadenie",
-		"timeplansMessage": "Pridajte vaše zariadenie pre jednoduché nastavenie časových plánov!",
-		"name": "Názov",
+		"deviceAdd": "Pridať nové zariadenie",
+		"deviceInstruction": "Momentálne nemáte pridané žjadne zariadenia!",
 		"deviceName": "Názov zariadenia",
+		"deviceConnected": "Nové zariadenie bolo pripojené a identifikované! Chcete ho pridať?",
+		"name": "Názov",
 		"ip": "Ip adresa",
 		"cancel": "Zrušiť",
 		"confirm": "Potvrdiť",
@@ -22,15 +22,15 @@
 		"choseDays": "Vyberte dni",
 		"runNow": "Spustiť teraz",
 		"feedingInProg": "Dávkovanie prebieha...",
-		"status": "Status",
 		"emissionSize": "Veľkosť dávky",
-		"deviceConnected": "Nové zariadenie bolo pripojené a identifikované! Chcete ho pridať?",
 		"networkData": "Údaje o vašej sieti",
 		"networkDataMessage": "Aplikácia potrebuje údaje o vašej sieti aby vedela komunikovať so zariadeniami! Pamätajte že vaše mobilné zariadenie musí byť na rovnakej sieti ako zariadenie!",
+		"networkDataInstruction": "Prosim zadajte prihlasovacie údaje do vašej domácej siete a umožnite apke komunikovať so zariadeniami!",
 		"networkName": "Názov vašej siete",
 		"networkPassword": "Heslo vašej siete",
 		"netowrkNamePlaceholder": "Moja domáca sieť",
 		"networkPasswordPlaceholder": "Heslo domácej siete",
+		"networkDataBtn": "Zadať údaje o sieti",
 		"yourDataPlaceholder": "Sem vložte svoje dáta",
 		"yourData": "Vaše dáta",
 		"yourDataMessage": "Skopírujte, preneste a vložte tento text do iného mobilného zariadenia pre synchronizáciu vašich dát o zariadeniach!",
@@ -52,6 +52,12 @@
 			"Piatok",
 			"Sobota", 
 			"Nedela"
+		],
+
+		"status": [
+			"Online",
+			"Offline",
+			"Error"
 		],
 
 		"prompts": {
@@ -79,13 +85,13 @@
 
 		"welcome": "Welcome",
 		"userData": "User settings",
-		"userDataMessage": "Enter login details for your home network to allow communication with devices!",
-		"userDataMessage2": "Enter your existing data to sync your data from another mobile device!",
 		"newDevice": "New devcie",
 		"deleteDevice": "Delete device",
 		"confirmDeleteDevice": "Are you sure you want to delete this device with all of it's plans?",
 		"device": "Devcie",
-		"timeplansMessage": "Add your device for easy feeding time schedule management!",
+		"deviceAdd": "Add new device",
+		"deviceInstruction": "Currently you have no devices added!",
+		"deviceConnected": "New device has been connected and identified! Do you want to add it?",
 		"name": "Name",
 		"deviceName": "Device name",
 		"ip": "Ip address",
@@ -97,15 +103,15 @@
 		"choseDays": "Select days",
 		"runNow": "Feed now",
 		"feedingInProg": "Feeding in progress...",
-		"status": "Status",
 		"emissionSize": "Bulk size",
-		"deviceConnected": "New device has been connected and identified! Do you want to add it?",
 		"networkData": "Your LAN credentials",
 		"networkDataMessage": "The application needs data about your network (LAN) to be able to communicate with devices! Remember that your mobile device must be on the same network (LAN) as the device!",
+		"networkDataInstruction": "Please enter credentials to your network (LAN) to allow the app to communication with devices!",
 		"networkName": "Your LAN name",
 		"networkPassword": "Your LAN password",
 		"netowrkNamePlaceholder": "My local area network",
 		"networkPasswordPlaceholder": "My network password",
+		"networkDataBtn": "Enter your network credentials",
 		"yourDataPlaceholder": "Paste your user data here",
 		"yourData": "Your data",
 		"yourDataMessage": "Copy, transfer and paste this text to another mobile device to sync your device data!",
@@ -127,6 +133,12 @@
 			"Friday",
 			"Saturday", 
 			"Sunday"
+		],
+
+		"status": [
+			"Online",
+			"Offline",
+			"Error"
 		],
 
 		"prompts": {

@@ -1,12 +1,12 @@
 <template>
 	<ion-header>
 		<ion-toolbar>
-			<!-- <img v-if="leftImg" :src="data.leftImg" slot="start" @click="$emit('profileClicked')"> -->
-			<img src="@/assets/imgs/avatar.svg" slot="start" @click="$emit('profileClicked')">
+			<ion-icon slot="start" :icon="icons.settingsOut" @click="$emit('profileClicked')"></ion-icon>
+			<!-- <img src="@/assets/imgs/avatar.svg" slot="start" @click="$emit('profileClicked')"> -->
 
 			<ion-title>{{title}}</ion-title>
 			
-			<ion-icon :icon="icons.add" slot="end" @click="$emit('addClicked')"></ion-icon>
+			<ion-icon slot="end" :icon="icons.add" @click="$emit('addClicked')"></ion-icon>
 		</ion-toolbar>
 	</ion-header>
 </template>
@@ -24,9 +24,9 @@ export default {
 
 <style lang="scss" scoped>
 ion-toolbar {
-	height: 54px !important;
+	// height: 54px !important;
 	max-height: 54px !important;
-	min-height: 54px !important;
+	// min-height: 54px !important;
 	--background: white;
 	--padding-start: 10px;
 	--padding-end: 10px;
@@ -35,16 +35,16 @@ ion-toolbar {
 	--border-color: transparent;
 	box-shadow: 0px 0px 15px -6px rgba(0, 0, 0, 0.3);
 
-	img {
-		height: 34px;
-		width: 34px;
-		border-radius: 50%;
-		transition: 0.1s;
+	// img {
+	// 	height: 34px;
+	// 	width: 34px;
+	// 	border-radius: 50%;
+	// 	transition: 0.1s;
 
-		&:active {
-			filter: contrast(60%);
-		}
-	}
+	// 	&:active {
+	// 		filter: contrast(60%);
+	// 	}
+	// }
 
 	ion-icon {
 		width: 25px;
