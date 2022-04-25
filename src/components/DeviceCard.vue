@@ -228,12 +228,12 @@ export default {
 			{
 				const urlifiedIp = this.urlifiedIp();
 
-				await Axios.get(urlifiedIp + "/resetAll?now");
+				await Axios.get(urlifiedIp + "/resetAll/?now");
 				const activePlans = this.plans.filter(plan => plan.active);
 				for (var i = 0; i < activePlans.length; i++)
 				{
 					const time = activePlans[i].time.split(":");
-					const request = urlifiedIp + "/plans?set" + i + "&hour=" + time[0] + "&minute=" + time[1];
+					const request = urlifiedIp + "/plans/?set" + i + "&hour=" + time[0] + "&minute=" + time[1];
 					for (var j = 0; j < activePlans[i].days.length; j++)
 					{
 						request += "&day" + activePlans[i].days[j];
@@ -254,7 +254,7 @@ export default {
 
 			try
 			{
-				await Axios.get(this.urlifiedIp() + "/feedTime?set=" + this.emissionData.size);
+				await Axios.get(this.urlifiedIp() + "/feedTime/?set=" + this.emissionData.size);
 			}
 			catch (err)
 			{
@@ -267,7 +267,7 @@ export default {
 				return this.showStatus();
 
 			this.isFeeding = true;
-			const reply = await Axios.get(this.urlifiedIp() + "/start?now").catch(error => {
+			const reply = await Axios.get(this.urlifiedIp() + "/start/?now").catch(error => {
 				if (!error.response || error.code == 'ECONNABORTED')
 				{
 					this.status = 1;
