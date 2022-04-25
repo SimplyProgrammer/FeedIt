@@ -10,10 +10,12 @@
 			<Selection :values="selectableDays.map(day => day.substring(0, 2))" ref="selection"/>
 		</div>
 
-		<div class="buttons-wrapper">
-			<ion-button color="secondary" @click="$refs.modal.closeModal()" ref="cancel">{{lang().cancel}}</ion-button>
-			<ion-button color="tertiary" @click="saveModal()" ref="save">{{lang().confirm}}</ion-button>
-		</div>
+		<template v-slot:footer>
+			<div class="buttons-wrapper">
+				<ion-button color="secondary" @click="$refs.modal.closeModal()" ref="cancel">{{lang().cancel}}</ion-button>
+				<ion-button color="tertiary" @click="saveModal()" ref="save">{{lang().confirm}}</ion-button>
+			</div>
+		</template>
 	</Modal>
 </template>
 

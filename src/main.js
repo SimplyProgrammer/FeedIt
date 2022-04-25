@@ -90,7 +90,19 @@ app.mixin({
 			this.$router.go(0);
 		},
 
-		lang() {
+		lang(translationKey = null) {
+			if (translationKey)
+			{
+				var transl = this.langs[this.language][translationKey = translationKey.toString()];
+				if (transl)
+					return transl;
+					
+				for (var key in this.langs[this.language])
+				{
+					if (key.indexOf(translationKey) > -1)
+						return this.langs[this.language][key];
+				}
+			}
 			return this.langs[this.language];
 		}
 	},

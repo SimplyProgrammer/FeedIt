@@ -29,12 +29,18 @@ ion-modal {
 		height: fit-content;
 	}
 
-	.buttons-wrapper {
-		display: flex;
-		margin-top: 50px;
+	ion-toolbar {
+		--padding-start: 2px;
+		--padding-end: 2px;
+		--padding-top: 0;
+		--padding-bottom: 4px;
 
-		ion-button {
-			flex: 1;
+		.buttons-wrapper {
+			display: flex;
+
+			ion-button {
+				flex: 1;
+			}
 		}
 	}
 }

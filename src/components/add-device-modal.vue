@@ -7,10 +7,12 @@
 		<h4 class="mt-1">{{lang().ip + ":"}}</h4>
 		<ion-input type="text" :placeholder="lang().ip + '...'" v-model.trim="ip" class="ion-padding" :class="{invalid : isIpAssigned() || !isIpValid(ip) && ip.length}"></ion-input>
 
-		<div class="buttons-wrapper">
-			<ion-button color="secondary" @click="$refs.modal.closeModal()">{{lang().cancel}}</ion-button>
-			<ion-button color="tertiary" @click="saveModal()">{{lang().confirm}}</ion-button>
-		</div>
+		<template v-slot:footer>
+			<div class="buttons-wrapper">
+				<ion-button color="secondary" @click="$refs.modal.closeModal()">{{lang().cancel}}</ion-button>
+				<ion-button color="tertiary" @click="saveModal()">{{lang().confirm}}</ion-button>
+			</div>
+		</template>
 	</Modal>
 </template>
 

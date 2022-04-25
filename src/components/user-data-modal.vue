@@ -9,27 +9,29 @@
 
 		<h4 class="mt-5">{{lang().yourData + ":"}}</h4>
 		<p>{{lang().yourDataMessage}}</p>
-		<textarea class="width-100" v-model.trim="data" :class="{invalid : !isValid()}"></textarea>
+		<textarea class="width-100" v-model.trim="data" :placeholder="lang('yourDataPlaceholder')+ '...' " :class="{invalid : !isValid()}" ref="textarea"></textarea>
 		<div class="d-flex">
-			<ion-button color="light" class="small" @click="back()">
+			<!-- <ion-button color="light" class="small" @click="back()">
 				<ion-icon :icon="icons.arrow"></ion-icon>
-			</ion-button>
+			</ion-button> -->
 			<ion-button color="light" @click="paste()">{{lang().paste}}</ion-button>
 			<ion-button color="light" @click="copy()">{{lang().copy}}</ion-button>
 		</div>
 
 		<h4 class="mt-5">{{lang().language + ":"}}</h4>
-		<ion-select v-model="lng" :ok-text="lang().confirm" :cancel-text="lang().cancel">
+		<ion-select interface="action-sheet" v-model="lng" :ok-text="lang().confirm" :cancel-text="lang().cancel">
 			<ion-select-option v-for="lang in Object.keys(langs)" :value="lang" :key="lang">{{langs[lang].langName + " - " + lang.toUpperCase()}}</ion-select-option>
 		</ion-select>
 
-		<div class="buttons-wrapper">
-			<ion-button color="secondary" @click="$refs.modal.closeModal()" ref="cancel">{{lang().cancel}}</ion-button>
-			<ion-button color="tertiary" @click="saveModal()" ref="save">
-				<ion-icon v-if="confirm" :icon="icons.checkmarkSharp"></ion-icon>
-				<div v-else>{{lang().confirm}}</div> 
-			</ion-button>
-		</div>
+		<template v-slot:footer>
+			<div class="buttons-wrapper">
+				<ion-button color="secondary" @click="$refs.modal.closeModal()" ref="cancel">{{lang().cancel}}</ion-button>
+				<ion-button color="tertiary" @click="saveModal()" ref="save">
+					<ion-icon v-if="confirm" :icon="icons.checkmarkSharp"></ion-icon>
+					<div v-else>{{lang().confirm}}</div> 
+				</ion-button>
+			</div>
+		</template>
 	</Modal>
 </template>
 
@@ -43,8 +45,8 @@ export default {
 
 	data() {
 		return {
-			data: localStorage.getItem("appData"),
-			oldData: localStorage.getItem("appData"),
+			data: [],
+			// oldData: localStorage.getItem("appData"),
 			networkName: "",
 			networkPassword: "",
 			changeCount: 0,
@@ -54,6 +56,10 @@ export default {
 	},
 
 	mounted() {
+		var data = localStorage.getItem("appData");
+		if (data?.length > 2)
+			this.data = data;
+
 		var networkData = JSON.parse(localStorage.getItem("networkData"));
 		if (networkData)
 		{
@@ -77,7 +83,7 @@ export default {
 	methods: {
 		isValid() {
 			try {
-				if (this.data)
+				if (this.data?.length)
 				{ 
 					var obj = JSON.parse(this.data);
 					obj.forEach(element => {
@@ -109,7 +115,8 @@ export default {
 		async copy() {
 			try
 			{
-				navigator.clipboard.writeText(this.data);
+				this.$refs.textarea.select();
+				document.execCommand("copy");
 
 				return await this.toast(this.lang().prompts.textCopied);
 			}
@@ -119,9 +126,9 @@ export default {
 			}
 		},
 
-		back() {
-			this.data = this.oldData;
-		},
+		// back() {
+		// 	this.data = this.oldData;
+		// },
 
 		async saveModal() {
 			const data = this.isValid();
@@ -163,10 +170,15 @@ h6 {
 }
 
 textarea {
-	height: 220px;
+	height: 30px;
 	border: 2px solid gray;
-	--padding-start: 10px;
+	padding: 5px;
 	transition: 0.2s;
+	overflow: hidden;
+	outline: none;
+	border: 1px solid gray;
+	border-radius: 8px;
+	resize: vertical;
 
 	&.invalid {
 		background: rgba(255, 0, 0, 0.22);

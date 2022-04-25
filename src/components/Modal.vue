@@ -12,6 +12,13 @@
 			</slot>
 		</div>
 	</ion-content>
+
+	<ion-footer>
+		<ion-toolbar>
+			<slot name="footer">
+			</slot>
+		</ion-toolbar>
+	</ion-footer>
 </template>
 
 <script>
@@ -32,6 +39,11 @@ export default {
 			this.$emit('closeClicked');
 			this.modalController.dismiss();
 		},
+
+		saveModal() {
+			this.$emit('acceptClicked');
+			this.modalController.dismiss();
+		}
 	},
 }
 </script>
