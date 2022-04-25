@@ -38,11 +38,6 @@ export default {
 		closeModal() {
 			this.$emit('closeClicked');
 			this.modalController.dismiss();
-		},
-
-		saveModal() {
-			this.$emit('acceptClicked');
-			this.modalController.dismiss();
 		}
 	},
 }
