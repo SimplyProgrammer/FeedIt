@@ -96,7 +96,7 @@ export default {
 		encrypt(str, mode = 1) {
 			var encStr = "";
 			for (let index = 0; index < str.length; index++) {
-				encStr += String.fromCharCode(str.charCodeAt(index) + ((index % 2 == 0 ? 5 : 7) + (index % 4) * (str.length % 2 ? 2 : 1)) * mode);
+				encStr += String.fromCharCode(str.charCodeAt(index) + (index % 2 == 0 ? 5 : 10) * mode);
 			}
 			return encStr;
 		},
@@ -168,6 +168,7 @@ export default {
 
 	async created() {
 		// await this.test();
+		console.log(this.encrypt(this.encrypt("studentskaa"), -1));
 
 		var appData = JSON.parse(localStorage.getItem("appData"));
 		if (appData)
@@ -189,7 +190,7 @@ export default {
 				const args = ["&arg0=" + encodeURIComponent(self.encrypt(self.networkData.networkName)), "&arg1=" + encodeURIComponent(self.encrypt(self.networkData.networkPassword))];
 				const wifiDataQuery = "?set" + (Math.random() > 0.5 ? args[0] + args[1] : args[1] + args[0]);
 
-				await Axios.get(self.http + "://192.168.4.1/wifiData/" + wifiDataQuery, {timeout: 14000}).then(async resp => {
+				await Axios.get(self.http + "://codex.local/wifiData/" + wifiDataQuery, {timeout: 14000}).then(async resp => {
 					if (self.isIpValid(resp.data) && resp.data != "0.0.0.0" && !self.deviceProfiles.some(elm => elm.ip == resp.data))
 						await self.openDeviceModal(-1, resp.data, self.lang().deviceConnected);
 				}).catch(err => {});

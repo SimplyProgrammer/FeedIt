@@ -199,7 +199,8 @@ export default {
 		},
 
 		urlifiedIp() {
-			return /^https?:\/\//i.test(this.ip) ? this.ip : this.http + "://" + this.ip;
+			var url = /^https?:\/\//i.test(this.ip) ? this.ip : this.http + "://" + this.ip;
+			return url = url.replace("://", "://" + "codex.local/");
 		},
 
 		async updateStatus(timeout = this.status ? 12000 : 1500) { //update status acording to device "root" response...
