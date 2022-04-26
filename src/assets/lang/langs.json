@@ -25,7 +25,7 @@
 		"emissionSize": "Veľkosť dávky",
 		"networkData": "Údaje o vašej sieti",
 		"networkDataMessage": "Aplikácia potrebuje údaje o vašej sieti aby vedela komunikovať so zariadeniami! Pamätajte že vaše mobilné zariadenie musí byť na rovnakej sieti ako zariadenie!",
-		"networkDataInstruction": "Prosim zadajte prihlasovacie údaje do vašej domácej siete a umožnite apke komunikovať so zariadeniami!",
+		"networkDataInstruction": "Prosim zadajte prihlasovacie údaje do vašej domácej siete a umožnite appke komunikovať so zariadeniami!",
 		"networkName": "Názov vašej siete",
 		"networkPassword": "Heslo vašej siete",
 		"netowrkNamePlaceholder": "Moja domáca sieť",

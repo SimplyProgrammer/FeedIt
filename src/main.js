@@ -38,7 +38,10 @@ Axios.defaults.timeout = 3000;
 Axios.defaults.httpsAgent = new https.Agent({
 	rejectUnauthorized: false,
 });
-// Axios.defaults.headers.common['Access-Control-Allow-Origin'] = '*'; // NOPE not working!
+// Axios.defaults.headers.common["sec-fetch-dest"] = "empty"; // NOPE not working!
+// Axios.defaults.headers.common["sec-fetch-mode"] = "no-cors"; // None of this
+// Axios.defaults.headers.common["sec-fetch-site"] = "cross-site";
+// Axios.defaults.headers.common['Access-Control-Allow-Origin'] = '*'; 
 // Axios.defaults.headers.common['Access-Control-Allow-Methods'] = 'GET,PUT,POST,DELETE,PATCH,OPTIONS';
 
 import langs from '@/assets/lang/langs.json';
@@ -104,6 +107,12 @@ app.mixin({
 				}
 			}
 			return this.langs[this.language];
+		},
+
+		httpClient(url, options = {}) {
+			options.mode = "no-cors";
+			return fetch(url, options);
+			// return Axios.get(url, options);
 		}
 	},
 

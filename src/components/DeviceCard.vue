@@ -75,7 +75,6 @@
 
 <script>
 import AddPlanModal from '@/components/add-plan-modal.vue';
-import Axios from "axios";
 
 export default {
 	props: {
@@ -200,11 +199,11 @@ export default {
 
 		urlifiedIp() {
 			var url = /^https?:\/\//i.test(this.ip) ? this.ip : this.http + "://" + this.ip;
-			return url = url.replace("://", "://" + "codex.local/");
+			return url ;
 		},
 
 		async updateStatus(timeout = this.status ? 12000 : 1500) { //update status acording to device "root" response...
-			const reply = await Axios.get(this.urlifiedIp() + "/", {timeout: timeout}).then(resp => {
+			const reply = await this.httpClient(this.urlifiedIp() + "/", {timeout: timeout}).then(resp => {
 				this.status = resp.data == "CodeX Pet Feeder zariadenie root!" ? 0 : this.lang().prompts.notFeederIp.replace("XXXX", this.ip);
 			}).catch(error => {
 				if (!error.response || error.code == 'ECONNABORTED')
@@ -229,7 +228,7 @@ export default {
 			{
 				const urlifiedIp = this.urlifiedIp();
 
-				await Axios.get(urlifiedIp + "/resetAll/?now");
+				await this.httpClient(urlifiedIp + "/resetAll/?now");
 				const activePlans = this.plans.filter(plan => plan.active);
 				for (var i = 0; i < activePlans.length; i++)
 				{
@@ -240,7 +239,7 @@ export default {
 						request += "&day" + activePlans[i].days[j];
 					}
 					// console.log(request); 
-					await Axios.get(request);
+					await this.httpClient(request);
 				}
 			}
 			catch (err)
@@ -255,7 +254,7 @@ export default {
 
 			try
 			{
-				await Axios.get(this.urlifiedIp() + "/feedTime/?set=" + this.emissionData.size);
+				await this.httpClient(this.urlifiedIp() + "/feedTime/?set=" + this.emissionData.size);
 			}
 			catch (err)
 			{
@@ -268,7 +267,7 @@ export default {
 				return this.showStatus();
 
 			this.isFeeding = true;
-			const reply = await Axios.get(this.urlifiedIp() + "/start/?now").catch(error => {
+			const reply = await this.httpClient(this.urlifiedIp() + "/start/?now").catch(error => {
 				if (!error.response || error.code == 'ECONNABORTED')
 				{
 					this.status = 1;

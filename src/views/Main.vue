@@ -11,22 +11,22 @@
 						<!-- <div class="swiper-pagination swiper-pagination-bullets" slot="pagination"></div> -->
 					</swiper>
 				</div>
-				<div v-else class="instructions">
+				<div v-else class="instructions ion-padding">
 					<transition name="list">
 						<div v-if="!networkData?.networkName">
 							<img src="@/assets/imgs/icon.png" alt="device img">
-							<h4 class="ion-padding">{{lang().networkDataInstruction}}</h4>
-							<div class="ion-padding mt-6" @click="openUserDataModal()">
-								<ion-button class="mr-2 ml-2" expand="block">
+							<h4>{{lang().networkDataInstruction}}</h4>
+							<div class="ion-padding mt-7" @click="openUserDataModal()">
+								<ion-button expand="block">
 									{{lang('networkDataBtn')}}
 								</ion-button>
 							</div>
 						</div>
 						<div v-else>
 							<img src="@/assets/imgs/icon.png" alt="device img">
-							<h4 class="ion-padding">{{lang().deviceInstruction}}</h4>
-							<div class="ion-padding mt-6" @click="openDeviceModal()">
-								<ion-button class="mr-2 ml-2" expand="block">
+							<h4>{{lang().deviceInstruction}}</h4>
+							<div class="ion-padding mt-7" @click="openDeviceModal()">
+								<ion-button expand="block">
 									{{lang('deviceAdd')}}
 								</ion-button>
 							</div>
@@ -45,7 +45,6 @@ import AddDeviceModal from '@/components/add-device-modal.vue';
 import UserDataModal from '@/components/user-data-modal';
 
 import { alertController } from '@ionic/vue';
-import Axios from "axios";
 
 export default {
 	components: {
@@ -168,7 +167,6 @@ export default {
 
 	async created() {
 		// await this.test();
-		console.log(this.encrypt(this.encrypt("studentskaa"), -1));
 
 		var appData = JSON.parse(localStorage.getItem("appData"));
 		if (appData)
@@ -190,7 +188,7 @@ export default {
 				const args = ["&arg0=" + encodeURIComponent(self.encrypt(self.networkData.networkName)), "&arg1=" + encodeURIComponent(self.encrypt(self.networkData.networkPassword))];
 				const wifiDataQuery = "?set" + (Math.random() > 0.5 ? args[0] + args[1] : args[1] + args[0]);
 
-				await Axios.get(self.http + "://codex.local/wifiData/" + wifiDataQuery, {timeout: 14000}).then(async resp => {
+				await self.httpClient(self.http + "://codex.local/wifiData/" + wifiDataQuery, {timeout: 14000}).then(async resp => {
 					if (self.isIpValid(resp.data) && resp.data != "0.0.0.0" && !self.deviceProfiles.some(elm => elm.ip == resp.data))
 						await self.openDeviceModal(-1, resp.data, self.lang().deviceConnected);
 				}).catch(err => {});
@@ -224,6 +222,12 @@ export default {
 
 	p {
 		margin: 0;
+	}
+
+	ion-button {
+		padding-top: 5px;
+		padding-bottom: 5px;
+		font-size: 18px;
 	}
 }
 </style>

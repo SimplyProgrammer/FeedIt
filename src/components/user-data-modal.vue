@@ -9,19 +9,27 @@
 
 		<h4 class="mt-5">{{lang().yourData + ":"}}</h4>
 		<p>{{lang().yourDataMessage}}</p>
-		<textarea class="width-100" v-model.trim="data" :placeholder="lang('yourDataPlaceholder') + '...' " :class="{invalid : !isValid()}" ref="textarea"></textarea>
-		<div class="d-flex">
+		<div class="data">
 			<!-- <ion-button color="light" class="small" @click="back()">
 				<ion-icon :icon="icons.arrow"></ion-icon>
 			</ion-button> -->
-			<ion-button color="light" @click="paste()">{{lang().paste}}</ion-button>
-			<ion-button color="light" @click="copy()">{{lang().copy}}</ion-button>
+			<ion-button color="primary" expand="block" @click="copy()">{{lang().copy}}</ion-button>
+			<div class="d-flex ion-align-items-center">
+				<textarea v-model.trim="data" :placeholder="lang('yourDataPlaceholder') + '...' " :class="{invalid : !isValid(), none: pasteCount <= 0}" ref="textarea"></textarea>
+				<ion-button color="primary" expand="block" @click="pasteCount > 0 ? paste() : pasteCount++">{{lang().paste}}</ion-button>
+			</div>
 		</div>
 
 		<h4 class="mt-5">{{lang().language + ":"}}</h4>
-		<ion-select interface="action-sheet" v-model="lng" :ok-text="lang().confirm" :cancel-text="lang().cancel">
+		<ion-radio-group v-model="lng">
+			<ion-item v-for="lang in Object.keys(langs)" :key="lang" class="radio" lines="none">
+				<ion-label>{{langs[lang].langName + " - " + lang.toUpperCase()}}</ion-label>
+				<ion-radio slot="start" :value="lang" mode="md"></ion-radio>
+			</ion-item>
+		</ion-radio-group>
+		<!-- <ion-select interface="action-sheet" v-model="lng" :ok-text="lang().confirm" :cancel-text="lang().cancel">
 			<ion-select-option v-for="lang in Object.keys(langs)" :value="lang" :key="lang">{{langs[lang].langName + " - " + lang.toUpperCase()}}</ion-select-option>
-		</ion-select>
+		</ion-select> -->
 
 		<template v-slot:footer>
 			<div class="buttons-wrapper">
@@ -50,16 +58,13 @@ export default {
 			networkName: "",
 			networkPassword: "",
 			changeCount: 0,
+			pasteCount: 0,
 			confirm: 0,
 			lng: localStorage.getItem("lang") ?? "en",
 		}
 	},
 
 	mounted() {
-		var data = localStorage.getItem("appData");
-		if (data?.length > 2)
-			this.data = data;
-
 		var networkData = JSON.parse(localStorage.getItem("networkData"));
 		if (networkData)
 		{
@@ -100,6 +105,9 @@ export default {
 		},
 
 		async paste() {
+			if (this.pasteCount <= 0)
+				return;
+
 			try
 			{
 				this.data = await navigator.clipboard.readText();
@@ -115,8 +123,22 @@ export default {
 		async copy() {
 			try
 			{
-				this.$refs.textarea.select();
-				document.execCommand("copy");
+				// const el = document.createElement('textarea');
+				// el.value = "texxxxxxt"; // Nefunguje...
+				// el.setAttribute('readonly', '');
+				// el.style.position = 'absolute';
+				// el.style.left = '-9999px';
+				// document.body.appendChild(el);
+				// const selected =  document.getSelection().rangeCount > 0  ? document.getSelection().getRangeAt(0) : false;
+				// el.select();
+				// document.execCommand('copy');
+				// document.body.removeChild(el);
+				// if (selected) {
+				// 	document.getSelection().removeAllRanges();
+				// 	document.getSelection().addRange(selected);
+				// }
+
+				await navigator.clipboard.writeText(localStorage.getItem("appData"));
 
 				return await this.toast(this.lang().prompts.textCopied);
 			}
@@ -169,31 +191,39 @@ h6 {
 	font-size: 15.5px;
 }
 
-textarea {
-	height: 30px;
-	border: 2px solid gray;
-	padding: 5px;
-	transition: 0.2s;
-	overflow: hidden;
-	outline: none;
-	border: 1px solid gray;
-	border-radius: 8px;
-	resize: vertical;
+.radio {
+	--padding-start: 6px !important;
+}
 
-	&:focus {
-		box-shadow: 0px 0px 15px -6px rgba(0, 0, 0, 0.6);
-	}
+.data {
+	textarea {
+		width: 70%;
+		height: 30px;
+		border: 2px solid gray;
+		padding: 5px;
+		transition: 0.2s;
+		overflow: hidden;
+		margin-right: 4px;
+		border: 1px solid gray;
+		border-radius: 8px;
+		resize: none;
+		outline: none;
+		transition: 0.4s;
 
-	&.invalid {
-		background: rgba(255, 0, 0, 0.22);
-	}
-}	
+		&.none {
+			width: 0px !important;
+			position: absolute;
+			opacity: 0;
+		}
 
+		&:focus {
+			box-shadow: 0px 0px 15px -6px rgba(0, 0, 0, 0.6);
+		}
 
-.d-flex {
-	.small {
-		flex: 0;
-	}
+		&.invalid {
+			background: rgba(255, 0, 0, 0.22);
+		}
+	}	
 
 	ion-button {
 		flex: 1;
