@@ -188,7 +188,7 @@ export default {
 				const args = ["&arg0=" + encodeURIComponent(self.encrypt(self.networkData.networkName)), "&arg1=" + encodeURIComponent(self.encrypt(self.networkData.networkPassword))];
 				const wifiDataQuery = "?set" + (Math.random() > 0.5 ? args[0] + args[1] : args[1] + args[0]);
 
-				await self.httpClient(self.http + "://codex.local/wifiData/" + wifiDataQuery, {timeout: 14000}).then(async resp => {
+				await self.httpClient(self.http + "://192.168.4.1/wifiData/" + wifiDataQuery, {timeout: 14000}).then(async resp => {
 					if (self.isIpValid(resp.data) && resp.data != "0.0.0.0" && !self.deviceProfiles.some(elm => elm.ip == resp.data))
 						await self.openDeviceModal(-1, resp.data, self.lang().deviceConnected);
 				}).catch(err => {});
