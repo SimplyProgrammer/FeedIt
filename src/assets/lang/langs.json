@@ -73,8 +73,8 @@
 			"connectivityErr": "Chyba konektivity zariadenia",
 			"feedingInit": "Dávkovanie spustené!",
 			"feedingFailed": "Dávkovanie zlyhalo!",
-			"textPasted": "Text vložený!",
-			"textCopied": "Text skopírovaný!",
+			"textPasted": "Dáta vložené!",
+			"textCopied": "Dáta skopírované!",
 			"invalidData": "Zadané dáta sú chybné!",
 			"unsupportedOperation": "Nepodporovaná operácia!"
 		}
@@ -154,8 +154,8 @@
 			"connectivityErr": "Device connectivity error",
 			"feedingInit": "Feeding initiated!",
 			"feedingFailed": "Feeding failed!",
-			"textPasted": "Text pasted!",
-			"textCopied": "Text copied!",
+			"textPasted": "Data pasted!",
+			"textCopied": "Data copied!",
 			"invalidData": "The inserted data are invalid!",
 			"unsupportedOperation": "Unsupported operation!"
 		}
