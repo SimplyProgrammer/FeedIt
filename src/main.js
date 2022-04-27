@@ -66,6 +66,7 @@ app.mixin({
 				componentProps: componentProps
 			});
 			modal.present();
+
 			return modal;
 		},
 
@@ -73,9 +74,11 @@ app.mixin({
 			const toast = await this.toastController.create({
 				color: color,
 				message: message,
-				duration: duration
+				duration: duration,
 			});
 			toast.present();
+			toast.onclick = () => toast.dismiss();
+
 			return toast;
 		},
 
@@ -87,10 +90,10 @@ app.mixin({
 
 		setLang(lang) {
 			if (this.language == lang)
-				return;
+				return false;
 
 			localStorage.setItem("lang", this.language = lang);
-			this.$router.go(0);
+			return true;
 		},
 
 		lang(translationKey = null) {
@@ -111,8 +114,18 @@ app.mixin({
 
 		httpClient(url, options = {}) {
 			options.mode = "no-cors";
-			return fetch(url, options);
-			// return Axios.get(url, options);
+			// options.headers = {
+			// 	"Access-Control-Request-Private-Network": true
+			// };
+
+			if (localStorage.getItem("httpClientIndex") && localStorage.getItem("httpClientIndex") == 0)
+				return fetch(url, options);
+			return Axios.get(url, options);
+		},
+
+		setHttpClient(index) { // for debug
+			localStorage.setItem("httpClientIndex", index);
+			this.$router.go(0);
 		}
 	},
 

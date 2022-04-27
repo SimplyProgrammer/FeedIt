@@ -31,13 +31,12 @@
 			<ion-select-option v-for="lang in Object.keys(langs)" :value="lang" :key="lang">{{langs[lang].langName + " - " + lang.toUpperCase()}}</ion-select-option>
 		</ion-select> -->
 
+		<textarea class="copyBuffer" readonly ref="copyBuffer" />
+
 		<template v-slot:footer>
 			<div class="buttons-wrapper">
 				<ion-button color="secondary" @click="$refs.modal.closeModal()" ref="cancel">{{lang().cancel}}</ion-button>
-				<ion-button color="tertiary" @click="saveModal()" ref="save">
-					<ion-icon v-if="confirm" :icon="icons.checkmarkSharp"></ion-icon>
-					<div v-else>{{lang().confirm}}</div> 
-				</ion-button>
+				<ion-button color="tertiary" @click="saveModal()" ref="save">{{lang().confirm}}</ion-button>
 			</div>
 		</template>
 	</Modal>
@@ -57,9 +56,8 @@ export default {
 			// oldData: localStorage.getItem("appData"),
 			networkName: "",
 			networkPassword: "",
-			changeCount: 0,
 			pasteCount: 0,
-			confirm: 0,
+			changeCount: 0,
 			lng: localStorage.getItem("lang") ?? "en",
 		}
 	},
@@ -75,13 +73,8 @@ export default {
 
 	watch: {
 		data: function(newV, oldV) {
-			this.oldData = oldV;
+			// this.oldData = oldV;
 			this.changeCount++;
-			this.confirm = 0;
-		},
-
-		lng: function() {
-			this.setLang(this.lng);
 		}
 	},
 
@@ -123,29 +116,22 @@ export default {
 		async copy() {
 			try
 			{
-				// const el = document.createElement('textarea');
-				// el.value = "texxxxxxt"; // Nefunguje...
-				// el.setAttribute('readonly', '');
-				// el.style.position = 'absolute';
-				// el.style.left = '-9999px';
-				// document.body.appendChild(el);
-				// const selected =  document.getSelection().rangeCount > 0  ? document.getSelection().getRangeAt(0) : false;
-				// el.select();
-				// document.execCommand('copy');
-				// document.body.removeChild(el);
-				// if (selected) {
-				// 	document.getSelection().removeAllRanges();
-				// 	document.getSelection().addRange(selected);
-				// }
-
-				await navigator.clipboard.writeText(localStorage.getItem("appData"));
-
-				return await this.toast(this.lang().prompts.textCopied);
+				this.$refs.copyBuffer.value = localStorage.getItem("appData");
+				this.$refs.copyBuffer.select();
+				document.execCommand("copy");
 			}
 			catch (err)
 			{
-				return await this.toast(this.lang().prompts.unsupportedOperation, "danger");
+				try 
+				{
+					await navigator.clipboard.writeText(this.$refs.copyBuffer.value);
+				}
+				catch (err2) 
+				{
+					return await this.toast(this.lang().prompts.unsupportedOperation, "danger");
+				}
 			}
+			return await this.toast(this.lang().prompts.textCopied);
 		},
 
 		// back() {
@@ -154,24 +140,21 @@ export default {
 
 		async saveModal() {
 			const data = this.isValid();
-			if (data)
-			{
-				if (this.changeCount && this.confirm++ <= 0)
-					return;
 
-				const networkData = {
-					networkName: this.networkName,
-					networkPassword: this.networkPassword
-				};
+			const networkData = {
+				networkName: this.networkName,
+				networkPassword: this.networkPassword
+			};
 
-				localStorage.setItem("networkData", JSON.stringify(networkData));
-				return this.modalController.dismiss({
-					data: this.changeCount ? data : undefined,
-					networkData: networkData
-				});
-			}
+			if (this.changeCount > 0 && !data)
+				return await this.toast(this.lang().prompts.invalidData, "danger");
 
-			return await this.toast(this.lang().prompts.invalidData, "danger");
+			localStorage.setItem("networkData", JSON.stringify(networkData));
+			return this.modalController.dismiss({
+				data: this.data?.length ? data : undefined,
+				networkData: networkData,
+				refreshRequired: this.setLang(this.lng)
+			});
 		},
 	}
 };
@@ -193,6 +176,11 @@ h6 {
 
 .radio {
 	--padding-start: 6px !important;
+}
+
+.copyBuffer {
+	position: absolute;
+	transform: scale(0%);
 }
 
 .data {

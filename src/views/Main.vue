@@ -17,18 +17,14 @@
 							<img src="@/assets/imgs/icon.png" alt="device img">
 							<h4>{{lang().networkDataInstruction}}</h4>
 							<div class="ion-padding mt-7" @click="openUserDataModal()">
-								<ion-button expand="block">
-									{{lang('networkDataBtn')}}
-								</ion-button>
+								<ion-button expand="block">{{lang('networkDataBtn')}}</ion-button>
 							</div>
 						</div>
 						<div v-else>
 							<img src="@/assets/imgs/icon.png" alt="device img">
 							<h4>{{lang().deviceInstruction}}</h4>
 							<div class="ion-padding mt-7" @click="openDeviceModal()">
-								<ion-button expand="block">
-									{{lang('deviceAdd')}}
-								</ion-button>
+								<ion-button expand="block">{{lang('deviceAdd')}}</ion-button>
 							</div>
 						</div>
 					</transition>
@@ -128,6 +124,9 @@ export default {
 			this.networkData = data.networkData;
 			if (data.data)
 				this.deviceProfiles = data.data;
+
+			if (data.refreshRequired)
+				this.$router.go(0);
 		},
 
 		async openDeviceModal(index = -1, ip = "", message = null) {
@@ -167,6 +166,31 @@ export default {
 
 	async created() {
 		// await this.test();
+		const self = this;
+		document.onkeypress = async function(ev) { //for debug
+			if (ev.key == "`")
+			{
+				const confirm = await alertController.create({
+					header: "Change HTTP client?",
+					buttons: [
+						{
+							text: "Fetch (no cors)",
+							handler: () => {
+								self.setHttpClient(0);
+							},
+						},
+						{
+							text: "Axios",
+							handler: () => {
+								self.setHttpClient(1);
+							},
+						}
+					],
+				});
+
+				await confirm.present();
+			}
+		}
 
 		var appData = JSON.parse(localStorage.getItem("appData"));
 		if (appData)
@@ -182,7 +206,7 @@ export default {
 		if (networkData)
 			this.networkData = networkData;
 
-		const self = this, newDeviceConnectionLoop = async function(time) {
+		const newDeviceConnectionLoop = async function(time) {
 			if (self.networkData?.networkName)
 			{
 				const args = ["&arg0=" + encodeURIComponent(self.encrypt(self.networkData.networkName)), "&arg1=" + encodeURIComponent(self.encrypt(self.networkData.networkPassword))];
