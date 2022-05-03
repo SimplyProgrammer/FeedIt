@@ -5,7 +5,10 @@
 		<h6 class="mt-1">{{lang().networkName + ":"}}</h6>
 		<ion-input type="text" :placeholder="lang().netowrkNamePlaceholder + '...'" v-model.trim="networkName" class="ion-padding"></ion-input>
 		<h6 class="mt-1">{{lang().networkPassword + ":"}}</h6>
-		<ion-input type="password" :placeholder="lang().networkPasswordPlaceholder + '...'" v-model.trim="networkPassword" class="ion-padding"></ion-input>
+		<div class="passwordInput d-flex ion-align-items-center mt-1 mb-3">
+			<ion-input :type="showWifiPassword ? 'text' : 'password'" :placeholder="lang().networkPasswordPlaceholder + '...'" v-model.trim="networkPassword"></ion-input>
+			<ion-icon :icon="showWifiPassword ? icons.eyeOff : icons.eye" @click="showWifiPassword ^= true"></ion-icon>
+		</div>
 
 		<h4 class="mt-5">{{lang().yourData + ":"}}</h4>
 		<p>{{lang().yourDataMessage}}</p>
@@ -58,6 +61,7 @@ export default {
 			networkPassword: "",
 			pasteCount: 0,
 			changeCount: 0,
+			showWifiPassword: false,
 			lng: localStorage.getItem("lang") ?? "en",
 		}
 	},
@@ -95,6 +99,12 @@ export default {
 			} catch (e) {
 				return false;
 			}
+		},
+
+		chnagePasswordVisibility()
+		{
+			console.log(123);
+			;
 		},
 
 		async paste() {
@@ -216,6 +226,20 @@ h6 {
 	ion-button {
 		flex: 1;
 		height: 30px;
+	}
+}
+
+.passwordInput {
+	border-bottom: 1px lightgray solid;
+
+	ion-input {
+		margin: 0 !important;
+		border: none;
+	}
+
+	ion-icon {
+		margin-right: 4px;
+		font-size: 22px;
 	}
 }
 
